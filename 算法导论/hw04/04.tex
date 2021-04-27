@@ -1,0 +1,178 @@
+\documentclass[12pt,a4]{article}
+
+
+\newcommand{\handoutdate}{Thursday, 2019-10-10}
+\newcommand{\firstduedate}{Monday, 2019-10-14}
+\newcommand{\finalduedate}{Monday, 2019-10-21}
+
+\input{preamble}
+
+
+
+
+\setcounter{section}{3}
+
+\section{Bottleneck Paths}
+
+Let $G=(V,E)$ be a directed graph with an edge capacity function $c: E \rightarrow \R^+$. For a path
+$p = u_0 u_1 \dots u_t$ define its {\em capacity} to be
+\begin{align}
+   c(p) := \min_{1 \leq i \leq t} c( \{u_{i-1}, u_i\}) \ .
+\end{align}
+
+\begin{quotation}
+    \textbf{Maximum Capacity Path Problem (MCP).} Given a directed graph $G = (V,E)$, an edge capacity function
+    $c: E \rightarrow \R^+$, and two vertices $s, t \in V$, compute the path $p^*$ maximizing $c(p)$. We
+    denote by $p^*$ the optimal path and by $c^* := c(p^*)$ its cost. 
+\end{quotation}
+
+
+
+\begin{exercise}
+   Suppose the edges $e_1,\dots,e_m$ are sorted by their cost. Show how to solve MCP in time $O(n+m)$.
+   \paragraph{Solution}
+   \begin{algorithm}
+        \caption{Find the MCP with sorted edges list $E = \{e_1, e_2, \cdots, e_m \}$}                
+        \begin{algorithmic}[1]                    
+        \STATE $S \leftarrow \{ s \}$\\
+        \STATE $E' \leftarrow \emptyset$\\
+        \FOR {$e_i = (u, v) \in E$}
+            \STATE $E' \leftarrow E' \cup \{ e_i \}$ \\
+            \IF{$u \in S$ and $v \not\in S$}       
+                \STATE BFS from $v$ in $(V / S, \{ (u, v) | (u, v) \in E', u, v \not \in E' \})$, add all passing vertex to S,
+                , add all passing edge to E \\
+                \IF {$t \in S$}
+                    \RETURN $c(e_i)$
+                \ENDIF
+            \ENDIF
+        \ENDFOR
+        \end{algorithmic}
+    \end{algorithm}
+
+    Because the edges has been sorted by their cost, so we can consider add edges to the edge set $E'$ from largest to smallest. We need to maintain a vertex
+    set $S$ represent the reachable vertex from $s$ in $(V, E')$。The $S$ will change if and only if the new edge
+    $(u, v)$ join $E'$ and $u \in S, v \not\in S$。 So we can simply BFS from $v$, and add vertex along the way to $S$.
+
+    In all BFS, we will just access each vertex $v$ at most the in-degree of $v$ times, 
+    This is because if we access $v$ from $u$ through a certain edge $e$, we must have $u \not\in S$ before BFS.
+    Obviously, $u$ will not be added in $S$ twice. And we also have $e \not \in E'$,so we will just access each edge only once because of 
+    the same reason, so the complexity is $O(n+m)$。
+  
+\end{exercise}
+\newpage
+\begin{exercise}
+   Give an algorithm for MCP of running time $O(m \log \log m)$. \textbf{Hint:} Using the median-of-medians algorithm,
+   you can determine an edge $e$ such that at most $m/2$ edges are cheaper than $e$ and at most $m/2$ edges are
+   more expensive than $e$. Can you determine, in time $O(n+m)$, whether $c^* < c(e)$, $c^* = c(e)$, or $c^* > c(e)$?
+   Iterate to shrink the set of possible
+    values for $c^*$ to $m/4$, $m/8$, and so on.
+\end{exercise}
+\paragraph{Solution}
+\begin{algorithm}  
+  \caption{A O(m$\log m \log m$) algorithm for MCP Problem}  
+  \label{alg::conjugateGradient}  
+  \begin{algorithmic}[1]  
+    \REQUIRE  
+      $G = (V,E)$: the graph;    
+      $m = |E|$: the number of edge;    
+      $e \in E$: an edge of the graph;  
+      $c_e \in \mathbb{N}$: the capacity of edge $e$;  
+      $s$: the source point;  
+      $t$: the target point;
+    \ENSURE  
+      The answer of MCP Problem
+    \STATE Initialize IterCount $\leftarrow$ 0,E' $\leftarrow$ E,L $\leftarrow$ $min_{e\in E}c_e$,U = $max_{e\in E}c_e$
+
+    \WHILE {$IterCount < \log s(m)$} 
+    	\STATE Determin the median M of $\{c_e:e\in E',c_e \leq U\}$
+    	\STATE $T:=\{e\in E':c_e \leq M\}$,$F:=\{e\in E':c_e > M\}$
+    	\IF{$(V,F)$ is s-t-connected}  
+            \STATE $E' \leftarrow F,L \leftarrow M$  
+        \ELSE  
+            \STATE $U \leftarrow M$  
+        \ENDIF  
+        \STATE IterCount $\leftarrow$ IterCount + 1
+    \ENDWHILE 
+    \STATE Number the $t$ edges in $\{e\in E':c_e \leq U\}$ according to increasing weights:$e_1,\dots,e_t$ (We need to use something like quick sort)
+    \STATE Solve the instance by the method in Question 1 with the following ordering:
+	$$ 
+	    order(e)=\left\{
+		\begin{aligned}
+		1 &   &if\text{  }c_e \leq L &\\
+		i+1 &  &if\text{  }e\in E',e = e_i &\\
+		m &   &if\text{  }c_e > U &
+		\end{aligned}
+		\right.
+	$$
+
+  \end{algorithmic}  
+\end{algorithm}  
+\subparagraph{}Apparently, we can solve the MCP problem with the algorithm used in Exercise 1 if we've got the edges sorted. But by using the algorithm above, we've estimated an upper bound of MCP problem. So that we don't have to distinguish the edges which have larger capacity than the upper bound. What we finally need to do is it to determine the bottleneck value by sorting edges in $E'$ and run the algorithm used in Exercise 1.
+\subparagraph{Complexity Analysis} We use BFS algorithm to check whether the graph is connected with complexity $O(m)$. In this part, the total complexity is $O(m\log s(m))$.
+\subparagraph{}The other part is sorting edges in $E'$, which is the set containing bottleneck edge. The complexity is $O(\frac{m}{s(m)}\log\frac{m}{s(m)})$
+\subparagraph{}Taking $s(m)$ as $\log(m)$, we can see that the complexity of the algorithm is $O(m\log\log(m))$ 
+
+
+\begin{exercise}
+   Give an algorithm for MCP that runs in time $O(m \log \log \log m)$? How about $O(m \log \log \log \log m)$? How far can you get?
+   
+
+\end{exercise}
+
+\begin{algorithm}
+    \caption{MCP}
+    \label{a1}
+    \begin{algorithmic}[1]
+    \REQUIRE $input$:  $V,E,c,s,t,k,p_1,p_2,\cdots,p_k$
+    \STATE $E' \leftarrow E$\\
+    \FOR {i from 1 to $\lfloor k \rfloor$}
+        \STATE find $\lceil \frac{1}{p_i} m \rceil, \cdots, \lceil \frac{p_i - 1}{p_i}m \rceil$-th largest member in $E'$ as $c_1, c_2, c_3, \cdots, c_{p_i-1}$
+        \FOR {$e \in E'$} 
+            \IF{$c(e) < c_1$}
+            \STATE add e to $E_1$
+            \ELSIF{$c(e) == c_j$ and $ 1 \leq j \leq p_{i} - 1$}
+            \STATE add e to $E_{2j}$
+            \ELSIF{$ c_j<c(e)<c_{j+1}$ and  $ 1 \leq j < p_{i} - 1$}
+            \STATE add e to $E_{2j+1}$
+            \ELSE
+            \STATE add e to $E_{2p_i - 1}$
+            \ENDIF
+            \IF{$c(e) < min\{c(e) | e \in E'\}$}
+            \STATE $k_e = 1$
+            \ELSIF{$e \in E_i$}
+            \STATE $k_e = i + 1$
+            \ELSE
+            \STATE $k_e = 2p_i + 1$
+            \ENDIF
+        \ENDFOR
+        \STATE use exercise 1 to solve MCP with k(order) and let $q = k_{MC}$ − 1
+        \IF{q is even}
+        \STATE $c_{q/2}$ is maximum capacity, exit
+        \ELSE
+        \STATE $E' \leftarrow E_q$
+        \ENDIF
+    \ENDFOR
+    \STATE sort elements in E' as $e_1, e_2, \cdots, e_l$
+        \IF{$c(e) < min\{c(e) | e \in E'\}$}
+        \STATE $k_e = 1$
+        \ELSIF{$e =e_i \in E'$}
+        \STATE $k_e = i + 1$
+        \ELSIF{$c(e) > max\{c(e) | e \in E'\}$}
+        \STATE $k_e = l + 1$
+        \ENDIF
+    \STATE use exercise 1 to solve MCP with k(order)
+    \end{algorithmic}
+\end{algorithm}
+
+
+
+\paragraph{Solution}
+\par In iteration i, we denote |E'| as $m_i$, line 3 runs in $O(m_i p_i)$ time, and $m_i \leq \frac{m}{\Pi_{j =1}^i p_j}$.And line 22 runs
+in $O(m)$ time, so the total running time becomes $O(\sum_{i = 1}^k m_{i-1}p_i + km + m_i log m_i)$
+\par  Let $p_1 = p_2 = 2, p_i = p_{i-1}^2$, then $p_i = 2^{2^{i-1}}$ and $m_i*p_i = m$. Let $k = logloglogm + 1$,then $m_k log{m_k} \leq \frac{m} {logm} * logm = m$. 
+\par In order to run MCP faster, we can reduce the running time of line 3. Line 3 can be running in time $O(m_i log{p_i})$, so we can let k = logloglog...logm with arbitary number of log. Then we can make MCP running in time of $O(mlogloglo...logm)$.
+
+
+
+
+\end{document}

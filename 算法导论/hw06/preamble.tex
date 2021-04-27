@@ -1,0 +1,63 @@
+
+
+
+\usepackage{graphicx,amsmath,amssymb,amsthm, boxedminipage}
+
+
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+
+\newtheorem{theorem}{Theorem}%[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+
+
+
+\newcommand{\scalar}[2]{\ensuremath{\langle #1, #2\rangle}}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\norm}[1]{\|#1\|}
+\newcommand{\pfrac}[2]{\left(\frac{#1}{#2}\right)}
+\newcommand{\nth}[1]{#1\textsuperscript{th}}
+
+% \newcommand{\nth}[1]{#1\textsuperscript{th}}
+\newcommand{\E}{\mathop{\mathbb{E\/}}}
+\newcommand{\N}{\mathbb{N}}
+
+\newcommand{\R}{\mathbb{R}}
+
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{exerciseD}[theorem]{*Exercise}
+\newtheorem{exerciseDD}[theorem]{**Exercise}
+
+\let\oldexercise\exercise
+\renewcommand{\exercise}{\oldexercise\normalfont}
+
+\let\oldexerciseD\exerciseD
+\renewcommand{\exerciseD}{\oldexerciseD\normalfont}
+
+\let\oldexerciseDD\exerciseDD
+\renewcommand{\exerciseDD}{\oldexerciseDD\normalfont}
+
+
+ 
+\begin{document}
+
+\date{}
+
+\title{CS 217 -- Algorithm Design and Analysis \\ 
+  \vspace{3mm}
+{\large	Shanghai Jiaotong University, Fall 2019\\
+}
+}
+\maketitle
+
+\noindent
+Handed out on \handoutdate{}\\
+First submission and questions due on \firstduedate{}\\
+You will receive feedback from the TA.\\
+Final submission due on \finalduedate{}

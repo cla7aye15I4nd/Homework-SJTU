@@ -1,0 +1,197 @@
+\documentclass[12pt,a4]{article}
+
+\usepackage{xcolor}
+
+
+\newcommand{\handoutdate}{Friday, 2020-06-05}
+\newcommand{\firstduedate}{Thursday, 2020-06-12}
+\newcommand{\finalduedate}{Thursday, 2020-06-19}
+
+
+
+
+
+\usepackage{graphicx,amsmath,amssymb,amsthm, boxedminipage}
+
+
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+
+\newtheorem{theorem}{Theorem}%[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+
+
+
+\newcommand{\scalar}[2]{\ensuremath{\langle #1, #2\rangle}}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\norm}[1]{\|#1\|}
+\newcommand{\pfrac}[2]{\left(\frac{#1}{#2}\right)}
+\newcommand{\nth}[1]{#1\textsuperscript{th}}
+
+% \newcommand{\nth}[1]{#1\textsuperscript{th}}
+\newcommand{\E}{\mathop{\mathbb{E\/}}}
+\newcommand{\N}{\mathbb{N}}
+
+\newcommand{\R}{\mathbb{R}}
+
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{exerciseD}[theorem]{*Exercise}
+\newtheorem{exerciseDD}[theorem]{**Exercise}
+
+\let\oldexercise\exercise
+\renewcommand{\exercise}{\oldexercise\normalfont}
+
+\let\oldexerciseD\exerciseD
+\renewcommand{\exerciseD}{\oldexerciseD\normalfont}
+
+\let\oldexerciseDD\exerciseDD
+\renewcommand{\exerciseDD}{\oldexerciseDD\normalfont}
+
+
+ 
+\begin{document}
+
+\date{}
+
+\title{CS 217 -- Algorithm Design and Analysis \\ 
+  \vspace{3mm}
+\author{no code}
+}
+\maketitle
+
+\noindent
+Handed out on \handoutdate{}\\
+First submission and questions due on \firstduedate{}\\
+You will receive feedback from the TA.\\
+Final submission due on \finalduedate{}
+
+
+
+
+
+\newcommand{\rank}{\textnormal{rank}}
+\newcommand{\y}{\mathbf{y}}
+\renewcommand{\c}{\mathbf{c}}
+\newcommand{\x}{\mathbf{x}}
+\newcommand{\z}{\mathbf{z}}
+\renewcommand{\u}{\mathbf{u}}
+\newcommand{\V}{\mathbf{v}}
+
+\renewcommand{\a}{\mathbf{a}}
+
+\renewcommand{\b}{\mathbf{b}} 
+\newcommand{\zero}{\mathbf{0}}
+\newcommand{\rpn}{\mathbb{R}_{\geq 0}}
+\newcommand{\sol}{\textup{\textrm{sol}}}
+\newcommand{\opt}{\textup{\textrm{opt}}}
+\setcounter{section}{6}
+
+
+\section{Farkas Lemma and LP Duality}
+
+\subsection{Different Versions of Farkas Lemma}
+
+In the following, let $A \in \R^{m \times n}$ and $\b \in \R^m$, and let 
+$\x = (x_1,\dots,x_n)^T$ be a column vector of $n$ variables and 
+$\y = (y_1, \dots,y_m)$ be a row vector of $m$ variables.
+
+\begin{exercise}
+ Show that the three versions of Farkas Lemma presented in class are all equivalent (I actually did not present
+ the third version in class):
+ \begin{align}
+   ( \neg \exists \x : \, A \x \leq \b ) \, & \Longleftrightarrow 
+    ( \exists \y \geq \zero : \, \y^T A = \zero, \,     \y^T \b < 0 ) \ . \\
+      ( \neg \exists \x \geq \zero : \, A \x \leq \b ) \, & \Longleftrightarrow 
+    ( \exists \y \geq \zero : \, \y^T A \geq \zero, \,  \y^T \b < 0 ) \ . \\
+   ( \neg \exists \x \geq \zero : \, A \x = \b ) \, & \Longleftrightarrow 
+    ( \exists \y \begingroup \color{white} \geq \zero \endgroup : \, \y^T A \geq \zero, \,  \y^T \b < 0 ) \ .
+ \end{align}
+  Note that the direction ``$\Longleftarrow$'' is easy in each case. 
+  We will show the ``$\Longrightarrow$'' of (1) in class using a technique called {\em Fourier-Motzkin Elimination}. 
+  This exercise is actually not that hard. The hardest part is keeping track of what you 
+  want to prove and what you can assume.
+\end{exercise}
+\paragraph{Solution}
+First, we prove each $\Longleftarrow$ of the statements is true. For(1), we just need to show that $ \exists \y \geq \zero : \, \y^T A = \zero, \,     \y^T \b < 0$ and $\exists \x : \, A \x \leq \b$ can't hold simultaneously. Because of $\y^T A \x = (\y^T A) \x = 0$ and $\y^T A \x = \y^T (A \x) \leq \y^T b < 0$ contradicts, so we prove (1). Similarly, $\y^T A \x = \y^T (A \x) \leq \y^T b < 0$ and $\y^T A \x = (\y^T A) \x \geq 0$ contradicts,so we prove (2). And $\y^T A \x = \y^T (A \x) = \y^T b < 0$ and $\y^T A \x = (\y^T A) \x \geq 0$ contradicts, so we prove (3).\\
+Next, we need to show the $\Longrightarrow$ of each statements are equivalent.\\
+(1)$\Longrightarrow$(2): if $\neg \exists \x \geq \zero : \, A \x \leq \b$ then, we have $\neg \exists \x : \begin{bmatrix} A \\ -I \end{bmatrix} \x \leq \begin{bmatrix} \b \\ \zero \end{bmatrix} $, then we let $A' = \begin{bmatrix} A \\ -I \end{bmatrix}, b' = \begin{bmatrix} \b \\ \zero \end{bmatrix}$, according to version (1), then there exist $\y' = \begin{bmatrix} \y_1 \\ \y_2 \end{bmatrix} \geq \zero$ satisfies $\y'^T A' = \zero, \y'^T b' < 0$, then we can conclude $\y_1 \geq 0, \y_1^TA \geq 0, \y_1^T b <0$, then because we find the $\y_1$, so (2) holds.\\
+(2)$\Longrightarrow$(3): if $\neg \exists \x \geq \zero : \, A \x = \b$, then we have $\neg \exists \x : \begin{bmatrix} A \\ -A \end{bmatrix} \x \leq \begin{bmatrix} \b \\ -\b \end{bmatrix} $, let $A' = \begin{bmatrix} A \\ -A \end{bmatrix}$, $b' = \begin{bmatrix} \b \\ -\b \end{bmatrix}$, then there exist $\y' = \begin{bmatrix} \y_1 \\ \y_2 \end{bmatrix} \geq \zero$ satisfies $\y'^T A' \geq \zero, \y'^T b' < 0$, then we can conclude $\y =\y_1 - \y_2,  \y_1^TA \geq 0, \y_1^T b <0$, then because we find the $\y = \y_1 - \y_2$, so (3) holds.\\
+(3)$\Longrightarrow$(1): we will prove the contraposition of (1) from the contraposition of (3). 
+$\y \geq \zero, \y^TA = \zero \Longleftrightarrow y^T [A, -A, I] \geq \zero$, let $A' = [A, -A, I]$ and according to (3), there exits $\x' = [\x_1, \x_2, \x_3]^T$ satisfies $A'\x' = \b$ with $\x'\geq 0$. Let $\x = \x_1 - \x_2$, we have $A\x \leq \b$, then (1) holds.
+
+\subsection{A Linear Program for, well, for what?}
+
+
+
+
+Let $G = (V,E)$ be a directed graph, $s,t \in V$,  and $c: E \rightarrow \mathbf{R}^+$ be a cost 
+function. We want to find an $s-t$-flow $f$ of value $1$. Every edge $e$ generates cost $f(e) \cdot c(e)$, and we want to minimize the overall cost. There are no capacity constraints.
+We can easily write this as a linear program MCF (Minimum Cost Flow):
+\begin{align*}
+  \textrm{MCF}(G,s,t,c): \qquad
+  \begin{array}{ll}
+    \textnormal{minimize} \quad & \multicolumn{1}{l}{\sum_{e \in E} c(e) f(e)} \\
+    \\
+    \textnormal{subject to} \quad & \sum_{v \in V} f(v,t)  = 1 \\
+					        & \sum_{u \in V} f(u,v) - \sum_{w \in V} f(v,w)  = 0  \quad \forall\ v \in V  \setminus \{s,t\}\\
+					        \\
+     & f(e)  \geq 0 \ \forall \ e \in E 
+  \end{array}
+\end{align*}
+Note that we have $m$ variables, one variable $f(e)$ for each edge $e$.
+The first constraint says that the value of the flow should be 1. The other constraints say that 
+the inflow at $v$ should equal the outflow.
+
+\begin{exercise}
+   Let $d$ be the shortest path distance from $s$ to $t$ in the directed graph $G$, where distance
+   means sum of the $c(e)$ along the path. Show that $\opt(MCF) = d$.
+   \textbf{Hint.} Make sure you show both $\leq$ and $\geq$.
+\end{exercise}
+
+\paragraph{Solution}
+\subparagraph{Proof of $opt(MCF)\leq d$} We can take out the shortest path, let $f(e) = 1$ if the edge is on the shortest path, and $f(e) = 0$ otherwise. Apparently it's a feasible solution.
+\subparagraph{Proof of $opt(MCF)\geq d$} Consider the residual network. We can arbitrarily choose a path at first, satisfying the restrictions of the MCF problem. To minimize the target value, we can try to eliminate all the circle C with $\Sigma_{e\in C}c(e)f(e) < 0$. By adding the circle to the old path, we've got a new path with smaller value.
+\subparagraph{}Now suppose that we choose a shortest path first, and we get a residual network. There is no circle with $\Sigma_{e\in C}c(e)f(e) < 0$ because there is no path shorter than the shortest path. So the final answer won't be less than d.
+\subparagraph{}In conclusion, $opt(MCF) = d$.
+
+\begin{exercise}
+    Write down the dual of MCF. This will be a maximization problem. Don't use any matrix notation.
+
+\paragraph{Solution}
+\begin{align*}
+    \begin{array}{ll}
+        \textnormal{maximize}\quad & z_t \quad v \in V  \\
+        \textnormal{subject to} \quad & z_v-z_u \leq c(u,v) \quad (u,v) \in E \\
+        & z_v \in \mathbb{R} \quad  \forall v \in V
+    \end{array}
+\end{align*}
+
+\end{exercise}
+
+\begin{exercise}
+   Interpret the dual. Show that it is the LP formulation of a ``natural'' maximization problem on $G$.
+
+\paragraph{Solution}
+This is a system of difference constraints. We can build a graph $G^'$ with the same structure as $G$ and have $dis(u,v) = c(u,v)$ as the length of an edge.
+
+So to maximize $z_t$, we need to solve the shortest path distance from $s$ to $t$ in $G^'$. It's the same to solve the shortest path distance from $s$ to $t$ in $G$ where distance means sum of the $c(e)$ along the path.
+
+\end{exercise}
+
+\begin{exercise}
+  Describe an optimal solution of the dual program.
+  
+\paragraph{Solution}
+The optimal solution of the dual program is the shortest path distance from $s$ to $t$ in the graph $G$ where distance means sum of the $c(e)$ along the path.
+
+\end{exercise}
+   
+   
+   
+\end{document}
