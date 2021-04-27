@@ -1,0 +1,234 @@
+% This is a template for lecture notes.
+\documentclass{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{bm}
+\usepackage{tcolorbox}
+\usepackage{enumerate}
+
+\CTEXoptions[today=old]
+
+%Some commonly used notations
+%\geometry{a4paper,bottom = 3cm,left = 3cm, right = 3cm}
+
+%for reference
+\usepackage{hyperref}
+\usepackage[capitalise]{cleveref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{answer}[theorem]{Answer}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{example}[theorem]{Example}
+\newenvironment{solution}{\noindent \textit{proof:}}{$\Box$}
+\newtheorem{observation}[theorem]{Observation}
+
+%to use newcommand for convenience
+\newcommand\field{\mathbb{F}}
+\newcommand\Real{\mathbb{R}}
+\newcommand\Q{\mathbb{Q}}
+\newcommand\Z{\mathbb{Z}}
+\newcommand\complex{\mathbb{C}}
+
+%this is how we define operators.
+\DeclareMathOperator{\rank}{rank} % rank
+
+\title{Advanced Algorithm Homework 4}
+\author{于峥 518030910437}
+\date{\today}
+
+\begin{document}
+    \maketitle
+    
+\begin{problem}
+\end{problem}
+\begin{solution}
+    \begin{enumerate}[1.]
+        \item 
+        $$
+        \mathrm{E}[Z_i] = 1 - 2p
+        $$
+        $$
+        \mathrm{E}[S_i|Z_1,Z_2,\dots,Z_{i-1}] = \mathrm{E}[S_{i-1}+Z_i+2p-1|Z_1,Z_2,\dots,Z_{i-1}]=S_{i-1}
+        $$
+        \item
+        $$
+        \mathrm{E}\left[\left(\frac p {1-p}\right)^{Z_t}\right] = 
+        p(\frac {1-p} {p}) + (1-p)(\frac {p} {1-p}) = 1
+        $$
+        $$
+        \mathrm{E}[P_t|Z_1,Z_2,\dots,Z_{t-1}]=\mathrm{E}\left[P_{t-1}\left(\frac p {1-p}\right)^{Z_t}\mid Z_1,Z_2,\dots, Z_{t-1}\right]= P_{t-1} \cdot \mathrm{E}
+        \left[\left(\frac p {1-p}\right)^{Z_t}\right]=P_{t-1}
+        $$
+        
+        \item 
+       Note that $S_t = X_t + (2p-1)t$ and $P_t$ is a martingale, let $p_a = \mathrm{Pr}[X_\tau=a]$, than
+        $$
+        \mathrm{E}[S_{\tau}] = p_a\mathrm{E}[-a+(2p-1)\tau] + (1-p_a)\mathrm{E}[b+(2p-1)\tau] = 0
+        $$
+        $$
+        \mathrm{E}[P_\tau] = p_a \left(\frac {p} {1-p}\right)^{-a} + (1-p_a) \left(\frac {p} {1-p}\right)^{b} = 1
+        $$
+        Hence, 
+        $$
+        p_a = \frac {1-(\frac p {1-p})^b} {(\frac {1-p} p)^a-(\frac p {1-p})^b}
+        $$
+        $$
+        \mathrm{E}[\tau] = \frac {ap_a-b(1-p_a)} {2p-1}
+        $$
+        
+        In special, when $p=\frac 1 2$, we know $\mathrm{E}[\tau]=ab$ in class.
+    \end{enumerate}
+\end{solution}
+
+\begin{problem}
+\end{problem}
+\begin{solution}
+    \begin{enumerate}[1.]
+        \item Note that we can calculate the expectation of longest common sub-sequence when $n=2,3$ by enumerating. We get that $\mathrm{E}_2[X] = \frac 9 8$, and $\mathrm{E}_3[X]=\frac {29} {16}$.
+        
+        When $n$ is even, we can split two strings to $\frac n 2$ segments with length of 2, then 
+        calculate the sum of LCS of corresponding segments as lowerbound. Hence, $\mathrm{E}[X] 
+        \geq \frac 9 {16} n$. 
+        
+        When $n$ is odd, we split teo strings to $\frac {n-1} 2$ segments, first string's length is
+        3, other string's length is 2. Then we do the same get that $\mathrm{E}[X] \geq \frac {n-3} {2} \frac 9 8 + \frac{29} {16}$.
+        Hence, we can let $c_1 = \frac 9 {16}$.
+        
+        Now we compute the upper bound, let $t = \lambda n$,
+        \begin{align*}
+            \mathrm{E}[X] &\leq n\mathrm{Pr}[X\geq t]+t\mathrm{Pr}[X<t] \\
+            &= t + (n-t)\mathrm{Pr}[X\geq t] \\
+            &\leq t + (n-t)\frac {\binom{n}{t}^22^{2(n-t)}} {2^{2n}} \\
+            &=t + (n-t)2^{-t}\binom{n}{t}^2 \\
+        \end{align*}
+        
+        then we using Stirling's formula, $c>1$ is a constant,
+        \begin{align*}
+            \binom{n}{\lambda n} &= \frac {n!} {(\lambda n)!(1-\lambda n)!}  \\
+            &\leq c
+            \left( \sqrt{2\pi n} \left(\frac n e \right)^n\right)
+            \left( \sqrt{2\pi\lambda n} \left(\frac {\lambda n} e \right)^{\lambda n}\right)^{-1}
+            \left( \sqrt{2\pi(1-\lambda) n} \left(\frac {(1-\lambda) n} e \right)^{(1-\lambda) n}\right)^{-1} \\
+            &= c \frac {((1-\lambda)^{1-\lambda}\lambda^\lambda)^{-n}} {\sqrt{2\pi\lambda(1-\lambda)n}}
+        \end{align*}
+        Hence
+        $$
+        (n-t)2^{-t}\binom{n}{t}^2 \leq 
+        c^2 \frac {(((1-\lambda)^{1-\lambda}\lambda^\lambda)^22^{-\lambda})^{-n}} 
+        {2\pi\lambda}
+        $$
+        If we choose $\lambda = 0.91$, then 
+        $((1-\lambda)^{1-\lambda}\lambda^\lambda)^22^{-\lambda} = 1.026 > 1$. It means
+        $(n-t)2^{-t}\binom{n}{t}^2 \rightarrow 0$ when $n \rightarrow \infty$. So let $c_2 = 0.92$,
+        $\mathrm{E}[X] \leq 0.92n$.
+        
+        \item $X = \mathrm{LCS}(x_1, y_1, x_2, y_2, \dots, x_n, y_n)$. Note that if we flip any $x_i$ or 
+        $y_i$, the $X$ will change at most 1. So that $f$ is 1-Lipschitz. By McDiarmid inequality,
+        $$
+        \mathrm{Pr}(|X-\mathrm{E}[X]|\geq \lambda) \leq 2\exp(-\frac {\lambda^2} {n})
+        $$
+    \end{enumerate}
+\end{solution}
+
+\begin{problem}
+\end{problem}
+\begin{solution}
+    Let $X_i$ be the indicator of the $i$-th ball is red, $S_n = \sum_{i=1}^n X_i$. 
+    Consider we choose a permutation with size $r+g$, then the first $n$ number is ball
+    we selected. Then the probability of any ball color is red is $\frac {r} {r+g}$. So
+    $\mathrm{E}[S_n]=\frac{nr}{r+g}$
+    We construct 
+    a Doob martingale $Z_i = \mathrm{E}[S_n|X_1,X_2,\dots,X_i]$. We know that
+    $$
+        Z_i = S_i + (n-i)\frac {r-S_i} {r+g-i} ~\text{and}~ Z_{i-1} = S_{i-1} + (n-i+1)\frac {r-S_{i-1}} {r+g-i+1}
+    $$
+    We can compute $\delta_i=|Z_i-Z_{i-1}|$,
+    \begin{itemize}
+        \item If $S_i=S_{i-1}$, note that $g+S_i \geq i$, so
+        $$
+        \delta_i \leq \frac {r-S_i} {r+g-i} \leq 1
+        $$
+        \item If $S_i=S_{i-1}+1$, 
+        $$
+        \delta_i = 1 + \frac {-(n-i)-(r-S_{i-1})} {r+g-i+1} \leq 1
+        $$
+        
+        Hence, $|Z_i-Z_{i-1}|\leq 1$, By Azuma-Hoeffding Ineqality, we get
+        $$
+        \mathrm{Pr}[|Z_n-Z_0| \geq \lambda] = \mathrm{Pr}[|S_n-\frac {nr} {r+g}| \geq \lambda]
+        \leq 2\exp(\frac {-\lambda^2} {2n})
+        $$
+    \end{itemize}
+    
+\end{solution}
+
+\begin{problem}
+\end{problem}
+\begin{solution}
+    \begin{enumerate}
+        \item Using the Linear of Expectation, 
+        $$\mathrm{E}[X] = \frac {n\binom{\binom{n-1}{2}}{cn}} {\binom{\binom{n}{2}}{cn}}$$
+        \item Consider we get the random graph in such way, we uniform choose a edge, if the edge is not in graph, then add it. Repeat the process until the graph has $N$ edges. Let $Z_i$ be $i$-th new edge. $Y$ be the number of isolated vertices. 
+        We construct the Doob martingale $X_i = \mathrm{E}[Y|Z_1, Z_2, \dots, Z_i]$. If $|X_i-X_{i-1}| \leq 2$. By Corollary 12.5, 
+        $$
+        \mathrm{Pr}[|X-\mathrm{E}[X]|\geq 2\lambda\sqrt{cn}] \leq 2 e^{-\lambda^2/2}
+        $$
+        % Because a edge may eliminate at most two isolated vertices,
+        Then we need to proof $|X_i-X_{i-1}| \leq 2$, 
+        we note that for any $e \not\in \{ Z_1, Z_2, \dots, Z_{i-1} \}$
+        $$
+        \mathrm{E}[X|Z_1,Z_2,\dots,Z_{i-1},Z_i=e] = 
+        \mathrm{E}[X|Z_1,Z_2,\dots,Z_{i-1}, e \in \{ Z_{i+1}, \dots, Z_N \}]
+        $$
+        Hence, we have
+        \begin{align*}
+             &\mathrm{E}[X|Z_1,Z_2,\dots,Z_{i-1}] \\
+            =& \sum_{Z_i=e, \dots, Z_N} \mathrm{Pr}[Z_i,\dots, Z_N|Z_1, \dots,Z_{i-1}]X +\\
+            &\sum_{Z_i, \dots, Z_N, e \not\in \{ Z_i,\dots, Z_N \}} \mathrm{Pr}[Z_i,\dots, Z_N|Z_1, \dots,Z_{i-1}]X \\
+            =& \sum_{Z_i, \dots, Z_N, e \not\in \{ Z_{i+1},\dots, Z_N \}}
+            \mathrm{Pr}[Z_i,\dots, Z_N|Z_1, \dots,Z_{i-1}]X \\
+            =& \mathrm{E}[X|Z_1, \dots,Z_{i-1},e\not\in \{ Z_{i+1}, \dots, Z_N\}]
+        \end{align*}
+        And we know that a edge may eliminate at most two isolated vertices. 
+        $$
+        X(Z_1,Z_2,\dots,e,\dots,Z_N)-
+        X(Z_1,Z_2,\dots,Z_N) \leq 2
+        $$
+        Therefore
+        \begin{align*}
+            &|X_i-X_{i-1}|  \\
+            =&|\mathrm{E}[X|Z_1,\dots,Z_i=e]-\mathrm{E}[X|Z_1, \dots,Z_{i-1},e\not\in \{ Z_{i+1}, \dots, Z_N\}]| \\
+            \leq& 2
+        \end{align*}
+        
+    \end{enumerate}
+\end{solution}
+
+\begin{problem}
+\end{problem}
+\begin{solution}
+    Let $X_1$ be a r.v.
+    $$
+    \mathrm{Pr}(X_1 = +1) = \mathrm{Pr}(X_1 = -1) = \frac 1 2
+    $$
+    then let $X_i = X_1$, $f(X_1, X_2, \dots, X_n) = \sum X_i$, and $f$ is 2-Lipschitz. Note that
+    $$
+    Z_0 = \mathrm{E}[f(X_1, X_2,\dots, X_n)] = 0, ~~~
+    Z_1 = \mathrm{E}[f(X_1, X_2, \dots, X_n)|X_1]=nX_1
+    $$
+    so we have $|Z_1 - Z_0|=n|X_1|=n>2$.
+\end{solution}
+
+
+\end{document} 

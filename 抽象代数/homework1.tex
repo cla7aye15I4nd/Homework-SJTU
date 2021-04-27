@@ -1,0 +1,91 @@
+\documentclass{ximera}
+\usepackage[UTF8]{ctex}
+
+\title{MA150 Algebra }
+\author{于峥}
+
+\begin{document}
+\begin{abstract}
+    homework 1
+\end{abstract}
+\maketitle
+
+\begin{problem} Page 5-4
+    \begin{solution}
+        (1) 反身性： $\phi(a) = \phi(a) \rightarrow a \sim a$。
+
+        (2) 对称性： $a \sim b \rightarrow  \phi(a) = \phi(b) \rightarrow b \sim a$。
+
+        (3) 传递性：$a\sim b, b \sim c \rightarrow \phi(a) = \phi(b) = \phi(c) \rightarrow a \sim c$。
+
+        令$[a] = \{x | \phi(x) = \phi(a)\}$，全体等价类为$\{[a] | a \in A \}$
+
+    \end{solution}    
+\end{problem} 
+
+\begin{problem} Page 6-8
+    \begin{solution}
+        (1) 反身性： $ab = ab \rightarrow (a, b) \sim (a, b) $。
+
+        (2) 对称性：$(a, b) \sim (c, d) \rightarrow ad = bc \rightarrow (c, d) \sim (a, b)$。
+
+        (3) 传递性：$(a, b) \sim (c, d), (c, d) \sim (e, f) \rightarrow ad = bc, cf = de$。
+        两式两边相乘消去 $dc$ 得 $ af=be \rightarrow (a, b) \sim (e, f)$。得证。
+    \end{solution}
+\end{problem} 
+
+\begin{problem} Page 16-5
+    \begin{solution}
+        (1) 封闭性： $a \oplus b = a + b - 2 \in \mathbb{Z} $。
+
+        (2) 结合律： 
+            \begin{align}
+                (a \oplus b) \oplus c &= (a + b - 2) + c - 2   \\
+                    &= a + (b + c - 2) - 2  \\
+                    &= a \oplus (b \oplus c)
+            \end{align}
+        
+        (3) 存在零元：
+            $ a \oplus 2 = a + 2 - 2 = a$。
+        
+        (4) 存在负元:
+            $ a \oplus 4 - a = a + 4 - a - 2 = 2$。
+            
+
+    \end{solution}
+\end{problem} 
+\begin{problem} Page 17-12
+    \begin{solution}
+        任取 $x, y \in G$, 由题意，有 $(xy)^2 = e = (yx)^2$。 
+        
+        又有$\forall a \in G$, $a=a^{-1}$
+        
+        整理得:
+        $(xy)^2=(yx)^2=(yx)^{-1}yx=xy\cdot yx \Rightarrow xy=yx$。
+    
+        所以$G$是一个交换群。
+
+    \end{solution}
+\end{problem}
+
+\begin{problem} Page 17-13
+    \begin{solution}
+        \textbf{必要性}：由交换群的性质有，$(ab)^2=a(ba)b=a(ab)b=a^2b^2$。
+        \textbf{充分性}：$\forall a, b \in G$, $(ab)^2=a^2b^2 \Rightarrow abab=aabb \Rightarrow ab=ba$。
+        所以$G$为阿贝尔群。
+
+    \end{solution}
+\end{problem}
+
+\begin{problem} Page 17-16
+    \begin{solution}
+        令 $S=\{ x | x \in G, x^3 = e\}$。
+        
+        显然 $e \in S$, 若 $\exists a \in S$， $a \not= e$, 则$a^2 \in S$. 且根据假设$a \not= e$, 所以 $a \not= a^2$。
+        且对于 $\forall a, b \in S, a \not= b, a \not= b^2$, 若 $a^2=b^2$, 则$a^3=e=ab^2\rightarrow b = a$, 产生矛盾。
+        所以对于$S$中除$e$外的元素都成对存在， 又$G$为有限群，所以元素个数为奇数。        
+    \end{solution}
+\end{problem}
+
+
+\end{document}
