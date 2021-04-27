@@ -1,0 +1,272 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{CJK}
+\usepackage{float}
+\usepackage{mdframed}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+\providecommand{\ud}[1]{\underline{#1}}
+
+\newmdtheoremenv{thm}{Theorem}
+\newmdtheoremenv{lemma}[thm]{Lemma}
+\newmdtheoremenv{fact}[thm]{Fact}
+\newmdtheoremenv{cor}[thm]{Corollary}
+\newtheorem{eg}{Example}
+\newtheorem{ex}{Exercise}
+\newmdtheoremenv{defi}{Definition}
+\newenvironment{sol}
+  {\par\vspace{3mm}\noindent{\it Solution}.}
+  {\qed \\ \medskip}
+
+\newcommand{\ov}{\overline}
+\newcommand{\ca}{{\cal A}}
+\newcommand{\cb}{{\cal B}}
+\newcommand{\cc}{{\cal C}}
+\newcommand{\cd}{{\cal D}}
+\newcommand{\ce}{{\cal E}}
+\newcommand{\cf}{{\cal F}}
+\newcommand{\ch}{{\cal H}}
+\newcommand{\cl}{{\cal L}}
+\newcommand{\cm}{{\cal M}}
+\newcommand{\cp}{{\cal P}}
+\newcommand{\cs}{{\cal S}}
+\newcommand{\cz}{{\cal Z}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\la}{\leftarrow}
+\newcommand{\Ra}{\Rightarrow}
+\newcommand{\dist}{\mbox{\rm dist}}
+\newcommand{\bn}{{\mathbb N}}
+\newcommand{\bz}{{\mathbb Z}}
+
+\newcommand{\expe}{{\mathsf E}}
+\newcommand{\pr}{{\mathsf{Pr}}}
+
+
+\setlength{\parindent}{0pt}
+%\setlength{\parskip}{2ex}
+\newenvironment{proofof}[1]{\bigskip\noindent{\itshape #1. }}{\hfill$\Box$\medskip}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+\newtheorem*{problem*}{Problem}
+
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{CS477 Combinatorics: Homework 5}
+\author{于峥 518030910437}
+\date{\today}
+
+\maketitle
+
+\begin{problem}
+给出Tur\'an定理的一个证明。(你不需要证明第二部分：$T(n,p)$是唯一取到最大值的图。)
+\begin{sol}
+  \paragraph{归纳法}
+  \paragraph{Inudction Base}$p = 2$, 考虑图$G=(V,E)$。所有点的度数平方和。注意到对于任意
+  $\{u,v\} \in E$, 因为不能有$K_3$, 所以$u$和$v$不能由公共邻点。即$\deg(u) + \deg(v) \leq n$
+  \begin{align*}
+      \sum_{u\in V}\deg(u)^2
+      &=\sum_{u\in V}\sum_{\{u, v\} \in E} \deg(u) \\
+      &=\sum_{\{ u, v \} \in E} \deg(u) + \deg(v) \\
+      &\leq mn
+  \end{align*}
+  又由柯西不等式
+  
+  $$\sum_{u\in V}\deg(u)^2 \geq \frac {\left(\sum_{u\in V}\deg(u)\right)^2} n \geq \frac {4m^2} n$$
+  所以$|E| = m \leq \frac {n^2} 4$
+
+  \paragraph{Induction Step} $p>2$的时候，考虑图$G=(V,E)$。对于与假设图中度数对最大的点为$x$。令
+  \begin{align*}
+    S &= \{ u : \{u, x\} \in E \} \\
+    T &= V / S
+  \end{align*}
+  由于$G$中没有大小为$p+1$的团，因此$S$中没有大小为$p$的团，否则点集$S \cup \{ x \}$构成大小为$p+1$的团。
+  令
+  
+  \begin{align*}
+    E' &= \{\{u, v\} : u, v\in S, \{u, v\} \in E\} \cup \{\{u, v\} : u \in S, v \in T\} \\
+    G' &= (V, E')
+  \end{align*}
+  
+  设$\deg(u)$为$u$在$G$中的度数，$\deg'(u)$为$u$在$G'$中的度数。
+  
+  若$u \in S$, 那么由于$G'$中保留了所有$S$内部的边，并且加入了所有跨越$S$和$T$的边，所以$\deg(u) \leq \deg'(u)$。  
+  若$u \in T$, 由于$x$是度数最大的点，所以$\deg'(u)=\deg(x) \geq \deg(u)$。
+
+  因此$|E'| \geq |E|$, 这意味着边数最大的图一定可以被转化成$G'$的形式。因此只需考虑$G'$的边最多为多少。
+
+  假设$\deg(x) = d$， 因为$S$中没有大小为$p$的团，所以边数最多$(1-\frac 1 {p-1})\frac {d^2} 2$。
+  而$S$和$T$之间边数为$(n-d)d$。而$(n-d)d + (1-\frac 1 {p-1})\frac {d^2} 2 \leq (1-\frac 1 p)\frac {n^2} 2$。
+
+  其中等号取到时，$d=\frac {n(p-1)} p$。
+
+  \paragraph{奇怪的方法}
+
+  图$G=(V,E)$没有大小为$p+1$的团，为图中每个点$i$指定一个权重$\omega_i \geq 0$。权重满足$\sum_{i=1}^n \omega_i=1$。我们要极大化
+  $$
+  W = \sum_{\{u,v\} \in E} \omega_{u} \omega_{v}
+  $$
+
+  对于任意一个权重分布，考虑图中不相邻的两个点$u,v$。$s_u，s_v$是所有与$u,v$相邻的点的权重和。如果
+  $s_u \geq s_v$。那么我们让让$v$的权重为0， $u$的权重为$\omega_u + \omega_v$。那么$W$一定是不降
+  的。因此我们可以不断进行这样的步骤。直到最后所有的非零权重限制在一个团上。那么这个团的大小为$k$,那么必然有
+  $k \leq p$。此时对于两个点，如果他们的权值不同, 将权值取平均。此时其他边的权值和没有变，而这条边的权值变大了。
+  所以最后$k$团中所有点的权值都一样。此时
+  $$
+  W = \frac {k(k-1)} 2 \frac 1 {k^2} = \frac 1 2 ({1 - \frac 1 k})
+  $$
+  假设我们初始让所有点的权值为$\frac 1 n$。那么有
+  $$
+  \frac m {n^2} \leq \frac 1 2 ({1 - \frac 1 k}) \leq \frac 1 2 ({1 - \frac 1 p})
+  $$
+  
+\end{sol}
+\end{problem}
+
+\begin{problem}
+如果在$n$个人中每个人最多和100个人相互认识，而每50个人中至少有两人相互认识。求$n$的最大值。
+\begin{sol}
+  先转化一下题目的条件，每50个人中至少有两人相互认识，这意味着把关系看成图的话，图$G$中不能有大小为50
+  的独立集。$\overline G$不能有大小为50的团。由此我们可以知道$\overline G$中的边$m \leq \frac {24n^2} {49}$。
+  
+  $G$中每个人最多和100个人相互认识，在$\overline G$
+  每个点最多和100个点无连边。所以每个点的度数$\deg(u) \geq n-101$。因此边数
+  $\frac {n(n-101)} 2 \leq m$。
+
+  连立得到$n \leq 4949$。并且等号是可以取到的，只需要构造一个含有$49$个大小为101的团的图就是$G$。
+\end{sol}
+\end{problem}
+
+\begin{problem}
+$G$是一个有$n$个点和$m$条边的图，证明：$G$中三角形的个数至少是$m(4m-n^2)/(3n)$。
+\begin{sol}
+  考虑图$G=(V,E)$。对于任意的$\{ u, v \} \in E$, 根据鸽巢原理，
+  与他们都相邻的点至少有$\max\{ 0, \deg(u) + \deg(v) - 2 - (n - 2)\}$个。意味着存在这条边的
+  三角形有这么多。记$T$为三角形个数。
+  那么有下式成立，由于每个三角形可能被统计三次，因此需要除以$3$，
+  $$
+  T \geq \frac 1 3 \sum_{\{u, v\} \in E }\deg(u) + \deg(v) - n
+  $$
+  而
+  \begin{align*}
+    &\frac 1 3 \sum_{\{u, v\} \in E }\deg(u) + \deg(v) - n\\
+    =&\frac 1 3 \sum_{u \in V} \deg(u)^2 - \frac {nm} 3 \\
+    \geq&\frac 1 {3n} \left( \sum_{u \in V} \deg(u) \right)^2 - \frac {nm} 3 \\
+    =&\frac {4m^2} {3n} - \frac {nm} 3
+  \end{align*}
+  因此至少有$\frac {4m^2} {3n} - \frac {nm} 3$个三角形。
+\end{sol}
+\end{problem}
+
+\begin{problem}
+平面上任取$n$个点，使得它们两两之间距离最多为1。定义$f(n)$为所有这样的$n$个点中两两距离大于$\sqrt{2}/2$的对数的最大值。求$f(n)$。
+\begin{sol}
+  \paragraph{Claim} 对于平面上任意$4$个点，两两之间的距离一定不都满足大于$\frac{\sqrt{2}} 2$且小于$1$。
+  
+  \textit{Proof} 设四个点分别为$a, b, c, d$。可以发现任意三个点组成的三角形，必定是锐角三角形，否则钝角所对应
+  的边一定大于1， 因此这四个点不能构成凸四边形。所以存在一个点被包含另外三个点构成的三角形内部，不妨设这个点
+  为$a$。那么考虑$a$和$b,c,d$形成的三个角，由于和为$2\pi$所以不可能都为锐角，产生矛盾。\newline
+
+  如果将小于$\sqrt{2}/2$的点之间连边，这意味着图中不存在$K_4$子图, 因此$f(n) \leq \left\lfloor \frac {n^2} 3\right\rfloor$。
+  并且等号是可以取到的。我们可以进行如下构造来构造一个完全三分图。
+  
+  1) 取一边长为$\frac {\sqrt{2}} 2 + 2\epsilon$的等边$\triangle ABC$, $\epsilon = 10^{-8}$。
+
+  2) 
+  在线段$AB$和$AC$上取和$A$距离$\epsilon$的点$A_1, A_2$, 
+  在线段$BC$和$BA$上取和$A$距离$\epsilon$的点$B_1, B_2$,
+  在线段$CA$和$CB$上取和$A$距离$\epsilon$的点$C_1, C_2$。
+
+  3) 分别在线段$A_1A_2$,$B_1B_2$,$C_1C_2$
+  任选$\left\lfloor \frac n 3 \right\rfloor$,
+  $\left\lfloor \frac {n+1} 3 \right\rfloor$,
+  $\left\lfloor \frac {n+2} 3 \right\rfloor$个点作为完全三分图的三个部分。
+
+  \paragraph{长度限制}
+  可以得到
+  $\overline{A_1B_2} = \frac {\sqrt{2}} 2, 
+   \overline{A_2B_2} = \frac {\sqrt{2}} 2 + \epsilon, 
+   \overline{A_1B_2}=\overline{A_2B_1} > \frac {\sqrt{2}} 2$。
+   因此从分别从$A_1A_2$和$B_1B_2$上任意选两点$u, v$, $1 > \overline{uv} > \frac {\sqrt{2}} 2$。
+
+   同理对于两外两对线段该结论也成立，因此图中所有边的长度满足题目要求。
+
+   \paragraph{取到等号} 图中的边数有
+   $$
+   |E| = \left\lfloor \frac n 3 \right\rfloor \left\lfloor \frac {n+1} 3 \right\rfloor 
+   +
+   \left\lfloor \frac n 3 \right\rfloor \left\lfloor \frac {n+2} 3 \right\rfloor 
+   +
+   \left\lfloor \frac {n+1} 3 \right\rfloor \left\lfloor \frac {n+2} 3 \right\rfloor 
+   $$
+   而上界为$M=\lfloor \frac {n^2} 3 \rfloor$。可以将$n=3k,3k+1,3k+2$的情况依次代入验证。
+  发现$|E|$和$|M|$相等。因此等号可以取到。
+
+  综上，$f(n)=\lfloor \frac {n^2} 3 \rfloor$。
+
+   
+
+\end{sol}
+\end{problem}
+
+\begin{problem}
+将一个图的各个点度数从大到小排序得到这个图的{\em 度数序列}。给定序列$d = (d_1, d_2, \dots, d_n)$，其中$d_1 \geq d_2 \geq \dots d_n$。
+
+如果$d$ 是某个简单图的度数序列，我们知道$\sum d_i$是偶数；证明：对任意的$1 \leq k \leq n$，
+\[
+\sum_{i=1}^k d_i \leq k(k-1) + \sum_{i=k+1}^n \min \{k, d_i\}.
+\]
+
+\begin{sol}
+  设$G=(V,E)$, 任意取图中的$k$个点，组成集合$K$,其他的点设为集合$S$。
+  另外有$E = \{ \{ u, v\} : u \in K, v \in S \}$。
+
+  注意到
+  \begin{align*}
+    \sum_{u\in K}\deg(u)
+    &=\sum_{u\in K, v \in K. \{u, v\} \in E} 2 + \sum_{u\in K, v \not\in K. \{u, v\} \in E} 1 \\
+    &\leq  k(k-1) + |E|
+  \end{align*}
+  
+  而
+  \begin{align*}
+    |E| &= \sum_{u\in S}\sum_{v\in K, \{u, v\} \in E} 1 \\
+    &\leq \sum_{u\in S} \min(\deg(u), |K|)    
+  \end{align*}
+
+  综上，
+  $$
+  \sum_{u\in K} \deg(u) \leq k(k - 1) + \sum_{u\in V / K} \min(\deg(u), k)
+  $$
+  
+  由于$K$的任意性。所以即使$K$中包含度数最大的$k$个点依然成立。
+\end{sol}
+\end{problem}
+
+\begin{problem}
+构造2020个两两不同构但有相同度数序列的图。
+\begin{sol}
+
+  构造$G_n = ([10000], E_n)$
+  $$
+  E_n = \{\{n, 10000\}, \{10000, n+1 \}\} \bigcup \{\{k, k + 1\} :  1 \leq k \leq 9998\}
+  $$
+  \paragraph{Claim} $E_2, E_3, \dots, E_{2021}$度数序列相同且互不同构。
+
+  1) 不难发现$G_n$有两个度数为$3$的点为$n$和$n+1$，两个度数为$1$的点$1,9999$。其他点的度数均为$2$。
+  因此度数序列相同。
+
+  2) 当想要构造$G_n$和$G_m(n\not=m)$的同构映射时，由于度数相同的限制，$G_n$中$1$点必须被
+  映射到$G_m$中某个度数为$1$的点，此时由于$G_n$中存在度数为$3$的点和$1$的最短距离分别为$n.n-1$。
+  而$G_m$中一定不存在这样的两个点。所以无法形成同构。
+
+\end{sol}
+\end{problem}
+
+\end{document}

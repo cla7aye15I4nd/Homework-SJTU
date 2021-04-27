@@ -1,0 +1,224 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{CJK}
+\usepackage{float}
+\usepackage{mdframed}
+\usepackage{indentfirst}
+
+\setlength{\parindent}{2em}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+\providecommand{\ud}[1]{\underline{#1}}
+
+\newmdtheoremenv{thm}{Theorem}
+\newmdtheoremenv{lemma}[thm]{Lemma}
+\newmdtheoremenv{fact}[thm]{Fact}
+\newmdtheoremenv{cor}[thm]{Corollary}
+\newtheorem{eg}{Example}
+\newtheorem{ex}{Exercise}
+\newmdtheoremenv{defi}{Definition}
+\newenvironment{sol}
+  {\par\vspace{3mm}\indent{\it Solution}.
+  \setlength{\parindent}{2em}}
+  {\qed \\ \medskip}
+  
+
+\newcommand{\ov}{\overline}
+\newcommand{\ca}{{\cal A}}
+\newcommand{\cb}{{\cal B}}
+\newcommand{\cc}{{\cal C}}
+\newcommand{\cd}{{\cal D}}
+\newcommand{\ce}{{\cal E}}
+\newcommand{\cf}{{\cal F}}
+\newcommand{\ch}{{\cal H}}
+\newcommand{\cl}{{\cal L}}
+\newcommand{\cm}{{\cal M}}
+\newcommand{\cp}{{\cal P}}
+\newcommand{\cs}{{\cal S}}
+\newcommand{\cz}{{\cal Z}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\la}{\leftarrow}
+\newcommand{\Ra}{\Rightarrow}
+\newcommand{\dist}{\mbox{\rm dist}}
+\newcommand{\bn}{{\mathbb N}}
+\newcommand{\bz}{{\mathbb Z}}
+
+\newcommand{\expe}{{\mathsf E}}
+\newcommand{\pr}{{\mathsf{Pr}}}
+
+
+\setlength{\parindent}{0pt}
+%\setlength{\parskip}{2ex}
+\newenvironment{proofof}[1]{\bigskip\noindent{\itshape #1. }}{\hfill$\Box$\medskip}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+\newtheorem*{problem*}{Problem}
+
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{CS477 Combinatorics: Homework 6}
+\author{于峥 518030910437}
+\date{\today}
+
+\maketitle
+
+\begin{problem}    
+$\mathcal{Q}_n$为$n$维的超立方体。
+
+(a) 计算$\mathcal{Q}_n$的点数, 边数。
+
+(b) 计算色数$\chi(\mathcal{Q}_n)$，也就是说，至少需要几种颜色对$\mathcal{Q}_n$进行染色，可以使任意两个相邻的点不同色。
+
+(c) 证明：对任意两个$\mathcal{Q}_n$中的点$u$和$v$，都有一个$\mathcal{Q}_n$的自同构$\varphi$，
+使得$\varphi(u) = v$。
+
+(d) (*) 确定$\mathcal{Q}_n$的自同构的个数。
+\begin{sol}
+    
+    \noindent(a) $Q_n = (V_n, E_n)$.
+    \begin{align*}
+        |V_0| &= 1 , |V_n| = 2V_{n-1} \\
+        |E_0| &= 0 , |E_n| = 2E_{n-1} + V_n \\        
+    \end{align*}
+    所以 $|V_n|=2^n$, $|E_n|=n2^{n-1}$。
+
+    \noindent(b) $\chi(\mathcal{Q}_0)=1$, $\chi(\mathcal{Q}_n)=2(n>0)$。
+    
+    \texttt{Induction Base} $n=1$, $Q_1$为一条线段所以至少需要两种颜色。
+    
+    \texttt{Induction Step} 如果$\chi(Q_n)=2$, 而$Q_{n+1}$可以看成将$Q_n$复制一份后
+    将对应点相连，因此我们可以把复制的版本的图点的颜色取反。那么此时两个图各自的染色满足条件。并且对应
+    点的颜色也是不同的。
+
+    \noindent(c) 我们可以利用超立方体的另一定义，将$Q_n$中的节点看作$\{0,1\}^{[n]}$中的元素，或者说$n$位二进制串。两个元素有边相连当且
+    仅当这两个二进制串只有一位不同。若此时有$\varphi(u)=v$，令$u[i]$为$u$的二进制第$i$位。那么
+    $D =\{ i : u[i] \not= v[i], i \in [n] \}$。我们让
+    \begin{equation*}
+        \varphi(x)[i] = \left\{
+            \begin{aligned}
+                & x[i] & i \not\in D \\
+                & x[i] \texttt{ xor } 1 & i \in D
+            \end{aligned}
+        \right.
+    \end{equation*}
+    如果两个二进制串$x,y$对应位置不同的集合为$S$。$\varphi(x)$和$\varphi(y)$不同位置的集合依然是$S$。
+    因此这是一个合法的自同构。
+    
+    在$\varphi$下, $\varphi(0) = u \oplus v = s$, 我们可以更简单的写成
+    $\varphi_s(t) = s \oplus t$。
+
+    \noindent(d) $|Aut(Q_n)|=2^nn!$。
+    对于$\forall \sigma \in Aut(Q_n)$, 如果$\sigma(0)=s$, 那么必然存在$\mu \in Aut(Q_n)$,
+    $\varphi_s \circ \mu=\sigma$。因此只要找到所有的$\mu$就可以找到全部的$Aut(Q_n)$。而
+    $\mu(0)=(\sigma \circ \varphi_s^{-1})(0) = 0$。所以我们找到所有满足$\mu(0)=0$的自同构即可。
+
+    对于$Q_n$, 有$n$个与$0$相邻的点$2^0, 2^1, \dots, 2^{n-1}$。由于经过$\mu$映射后仍然需要和
+    $0$相连。所以必然有$\mu(2^i)=2^j$。对于$\mu(2^0)，\mu(2^1),\dots, \mu(2^{n-1})$共有$n!$种
+    取值。假设$\mu(2^i)=2^{p(i)}$,那么$p(i)$就是$0,1,\dots n-1$的排列。而每个$p(i)$都可以对应合法的
+    $\mu$。我们可以这样构造，$\mu_p(s)[i]=s[p(i)]$, 这相当于是对所有的$01$串做了相同的轮换，
+    因此它依然满足格雷码的性质。
+
+    下面我们证明，$\mu_p$是也是唯一满足$\mu(2^i)=2^{p(i)},\mu(0)=0$的自同构。假设$s$上
+    有$k$个1，那么从$0$到$s$的最短路径长度一定为$k$，因为每次走一条边最多变化一位，并且也一定可以
+    做到变化任意一位。因此如果$\mu_p(s)=t$，由于$\mu(0)=0$，那么$s$和$t$上$1$的数量一定相同。进而
+    考虑$\mu(2^i+2^j)(i \not= j)$由于必须要与$2^{p(i)}$和$2^{p(j)}$距离都为$1$。所以$\mu(2^i+2^j)=2^{p(i)}+2^{p(j)}$。
+    依次类推，我们可以得到有三个$1$的时侯$\mu(2^i+2^j+2^j)$必须要与
+    $\mu(2^i+2^j)$，$\mu(2^i+2^k)$，$\mu(2^j+2^k)$距离为$1$，一直到$\mu(2^n-1)=2^n-1$。
+    因此$\mu_p$唯一满足条件的映射。
+
+    所以$|Aut(Q_n)|=2^nn!$。
+
+\end{sol}
+\end{problem}
+
+\begin{problem}
+给定正整数$k$，集合$A_1, A_2, \dots, A_k$满足：
+
+(1) 对每个$i \in [k]$，$A_i \subseteq [n]$；
+
+(2) 对每个$x \in [n]$，存在$i, j \in [k]$，使得$i \neq j$且$x \in A_i \cap A_j$；
+
+(3) 对每对$x,y \in [n]$，$x \neq y$，存在一个$i \in k$，使得$|A_i \cap \{x, y\}| = 1$。
+
+求$n$的最大值。
+\begin{sol}
+    我们反过来考虑，对于$x\in [n]$, 定义$B_x=\{ i : x \in A_i \}$。那么我们
+    可以通过刻画$B$来描述$A$。对于条件(1)是自动满足的。
+
+    而(2)意味着，$\forall x \in [n], |B_x| \geq 2$。(3)意味着$\forall x, y \in [n],
+    x \not= y, B_x \not= B_y$。容易得到满足这样条件(2)的$B$共有$2^k-k-1$个，而这$2^k-k-1$
+    集合也互不相同。所以$n=2^k-k-1$最大。
+    
+    % \texttt{这题真的这么简单????}
+\end{sol}
+\end{problem}
+
+\begin{problem}
+$n$个人玩这样一个游戏：每个人随机独立地被戴上红蓝两色帽子之一，概率各$1/2$。每个人可以看到所有别人的颜色，但是看不到自己的颜色。他们需要同时猜各自帽子的颜色，但是每个人都可以选择弃权。
+
+他们的目标是至少有一个人没有弃权，并且所有不弃权的人猜的都是对的。
+
+在游戏开始前他们可以讨论一个策略。令$f(n)$为所有策略能够达成目标的概率的最大值。
+
+(a) 求$f(2)$和$f(3)$。
+
+(b) 证明：$f(n) \leq n/(n+1)$。
+
+(c) 证明：$\lim_{n \to \infty} f(n) = 1$。
+
+(d) 对无穷多个$n$，证明$f(n) = n/(n+1)$。
+
+\begin{sol}
+    
+    我们可以把$n$个人的帽子颜色看成是一个长度为$n$的$01$串。而第$i$个人可以观测到除了这个串的除第
+    $i$位上的所有数。我们把$01$串看成$n$维超立方体上的一个点，相邻点只有一位不同。由于立方体上
+    有$n2^{n-1}$条边，而只有一位不同$01$串对数也是$n2^{n-1}$。因此每个人所能观测的部分$01$
+    串都对应了超立方体上的唯一的一条边。
+
+    假设第$i$个人对应的边为$\{u, v\}$，这意味着他需要走向一个点，或者弃权。如果在策略$C$下选择了$v$,那么我们
+    连一条$u$到$v$的有向边。因此对于每一个策略$C$，都对应了了一个超立方体上的一个有向图。
+
+    在这个策略下，如果真正的序列所对应的点为$P$,那么对于点$P$,我们需要$C$中至少有一条边指向它，并且
+    没有边从这个点出去，那么这些观测者就达到了目标。定义$R_C$为在策略$C$下，如果真正的序列所对应的点
+    在集合$R_C$中，那么就无法达到目标的点的集合。此时达到目标的概率为$1 - \frac {|R_C|} {2^n}$。
+
+    我们考察集合$R_C$的性质，对于任意不再$R_C$中的点$P$, 必然有边指向$P$，否则$P\in R_C$。假设
+    $Q$连向$P$，那么$Q \in R_C$。因此任意不属于$R_C$中的点与$R_C$中的某点相邻。
+    
+    反之，任意满足该性质的点集，都可以找到一个策略与之对应。我们只需要让$R_C$中的点向其相邻的不在
+    $R_C$中的点连边即可。
+
+    因此我们只要找到一个最小的满足该性质的点集，该点集所对应的策略就是最优策略。
+
+    \noindent (a) 在$n=2,3$时，可以通过枚举得到最小点集$R_C$都为$2$,因此$f(2)=\frac 1 2,f(3)=\frac 3 4$。
+
+    \noindent (b) 注意到$n$维立方体中每个点都与$n$个点相邻，这说明$R_C$中每个点最多可以让另外$n$个点不在$R_C$
+    中，因此我们有$(n+1)|R_c|\geq 2^n$，进而
+    $f(n)=1-\frac {|R_C|}{2^n} \leq \frac n {n+1}$。
+
+    \noindent (c) 记 $\gamma(n)$为$n$为立方体中最小的$|R_C|$大小。那么题目原命题等价于
+    $$\forall \epsilon \exists N, s.t. \forall n > N, \gamma(n) \ge 2^n(1-\epsilon)$$
+
+    因此我们让$\gamma(n) \geq \frac {2^n} {n+1} \geq 2^n(1-\epsilon)$。取
+    $N=\left\lceil \frac 1 {1-\epsilon} \right\rceil$即可。
+
+    \noindent (d) 我们可以证明当$n=2^k-1$时，$f(n)=\frac n {n+1}$。即$(n+1)|R_c|\geq 2^n$中
+    可以取到等号。可以发现，若等号取到，那么对于超立方体中任意一个点，如果它不属于点集$R_C$，那么
+    $R_C$只有一个点与其相邻。这实际上就是汉明码的性质。对于一个长度为$2^k-1$的汉明码，其中$2^k-k-1$
+    为真正的数据，另外$k$位校验码由这$2^k-k-1$所决定。所以合法的码有$2^{n-k}$种。当出现一位出错时可以被
+    检测出来，并将其对应到唯一正确的汉明码。因此我们取这$2^{n-k}$种正确的汉明码作为$R_C$,这样就得到了
+    满足等号条件的最小点集。
+
+\end{sol}
+\end{problem}
+
+\end{document}
+
+

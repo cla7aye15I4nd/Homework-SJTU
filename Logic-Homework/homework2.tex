@@ -1,0 +1,192 @@
+\documentclass{ximera}
+
+\usepackage[UTF8]{ctex}
+
+\title{Mathematical Logic}
+\author{于峥}
+
+\begin{document}
+\begin{abstract}
+    homework 2
+\end{abstract}
+\maketitle
+
+\begin{problem}
+    Prove that:
+    
+    (a) If A and B are both groups, then so is A $\times$ B.
+
+    (b) If A and B are both equivalence relations, then so is A $\times$ B.
+
+    (c) For two fields A and B, their direct product A $\times$ B is not necessarily a field
+
+    \begin{solution} .
+
+        (a) 
+        $a_0, a_1, a_2 \in A, b_0, b_1, b_3 \in B$，$\epsilon_a, \epsilon_b$ 分别为$A,B$中的单位元。
+        \begin{itemize} 
+            \item \textbf{封闭性}: 因为 $a_0 \cdot a_1 \in A$, $b_0 \cdot b_1 \in B$, 所以 $(a_0, b_0) \cdot (a_1, b_1) = (a_0 \cdot a_1, b_0 \cdot b_1) \in A \times B$。
+            \item \textbf{结合律}：
+            $$
+            \begin{aligned}
+                ((a_0, b_0) \cdot (a_1, b_1)) \cdot (a_2, b_2) 
+                &=  ((a_0 \cdot a_1) \cdot a_2, (b_0 \cdot b_1) \cdot b_2)\\
+                &=  (a_0 \cdot (a_1 \cdot a_2), b_0 \cdot (b_1 \cdot b_2))\\
+                &=  (a_0, b_0) \cdot ((a_1, b_1) \cdot (a_2, b_2))
+            \end{aligned}
+            $$
+            \item \textbf{单位元}：易验证$(\epsilon_a, \epsilon_b)$为单位元。
+            \item \textbf{逆元元}：易验证$(a_0^{-1}, b_0^{-1})$为$(a_0, b_0)$单位元。
+        \end{itemize}
+        (b)
+        \begin{itemize}
+            \item \textbf{传递性}: 
+            $(a_0, b_0) \sim (a_1, b_1) \land (a_1, b_1) \sim (a_2, b_2) \Rightarrow a_0 \sim a_2 \land b_0 \sim b_2 \Rightarrow (a_0, b_0) \sim (a_2, b_2)$。
+            \item \textbf{自反性}：$a_0 \sim a_0 \land b_0 \sim b_0 \Rightarrow (a_0, b_0) \sim (a_0, b_0)$
+            \item \textbf{对称性}：$(a_0, b_0) \sim (a_1, b_1) \Rightarrow a_0 \sim a_1 \land b_0 \sim b_1 \land a_1 \sim a_0 \land b_1 \sim b_0 \Rightarrow (a_0, b_0) \sim (a_1, b_1)$
+        \end{itemize}
+        (c) 
+        例如$A$,$B$都为$R$, $(a, 0)$ 没有乘法逆元$a \neq 0$。
+    \end{solution}
+\end{problem}
+
+\begin{problem} Prove Example 1.12.
+    \begin{solution}
+    
+       首先 $ \forall v_0\exists v_0 v_0 \circ v_1 \equiv e $,
+       又 $\exists v_2, v_1 \circ v_2 \equiv e$。
+
+       所以  $\forall v_0\exists v_1$
+       $$
+       \begin{aligned}  
+            v_1 \circ v_0 
+            &\equiv (v_1 \circ v_0) \circ e \\
+            &\equiv (v_1 \circ v_0) \circ (v_1 \circ v_2) \\
+            &\equiv v_1 \circ (v_0 \circ v_1) \circ v_2 \\
+            &\equiv v_1 \circ e \circ v_2 \\
+            &\equiv  v_1 \circ v_2 \\
+            &\equiv e
+       \end{aligned}
+       $$
+       有可以推出
+       $$e\circ v_0 \equiv (v_0 \circ v_1) \circ v_0 \equiv v_0 \circ (v_1 \circ v_0) \equiv v_0 \circ r \equiv v_0$$
+    \end{solution}
+\end{problem}
+
+\begin{problem} An S-formula is positive if it contains no logic symbols $\neg$, $\rightarrow$, and $\leftrightarrow$. Prove that
+    every positive formula is satisfiable.
+    \begin{solution}
+        For a $\mathfrak{A}$, Let $A = \{\epsilon\}$，for a positive $\phi$。
+        \begin{itemize}
+            \item $\phi = t_1 \equiv t_2$. we have 
+                $$
+                \begin{aligned}
+                    \mathfrak{A} \models \epsilon \equiv \epsilon \Leftrightarrow& 
+                                \mathfrak{A}(t_1) \equiv \mathfrak{A}(t_2) \\
+                                \Leftrightarrow& t_1 \equiv t_2
+                \end{aligned}
+                $$
+            \item $\phi = Rt_1\dots t_n$, Then we just need Let all relations can be satisfiable.
+            \item $\phi = \psi \lor \mathcal{X}$, 
+            $$
+                \mathfrak{A} \models \psi \land \mathfrak{A} \models \mathcal{X} \Rightarrow \mathfrak{A} \models \psi \land \mathcal{X}
+            $$
+            \item $\phi = \exists x \psi$, $x$ can just can be $\epsilon$, so $\mathfrak{A}\frac \epsilon x \models \phi$
+        \end{itemize}
+    \end{solution}
+\end{problem}
+
+\begin{problem}
+        S-structures $\mathfrak{A}, \mathfrak{B},\mathfrak{C}$
+
+        (1) $\mathfrak{A} \approxeq \mathfrak{A}$
+
+        (2) $\mathfrak{A} \approxeq \mathfrak{B}$  implies  $\mathfrak{B} \approxeq \mathfrak{A}$
+
+        (3) $\mathfrak{A} \approxeq \mathfrak{B}$ and $\mathfrak{B} \approxeq \mathfrak{C}$ then $\mathfrak{A} \approxeq \mathfrak{C}$
+        \begin{solution}
+            (1) A mapping $\pi$ : $A \rightarrow A$。
+            
+            Because $\forall x \in A, \pi(x) = x$, so 
+            \begin{itemize}
+                \item $\pi$ is  bijection.
+                \item For any n-ary relation symbol $R \in S$ and $a_0, a_1, \dots a_{n-1} \in A$, 
+                $$(a_0 \dots a_{n-1}) \in R^{\mathfrak{A}}\Rightarrow (\pi(a_0) \dots \pi(a_{n-1})=(a_0 \dots a_{n-1}) \in R^{\mathfrak{A}}$$
+                \item For any n-ary function symbol $f \in S$ and $a_0, a_1, \dots a_{n-1} \in A$, 
+                
+                $$\pi (f^{\mathfrak{A}}(a_0 \dots a_{n-1})) = f^{\mathfrak{A}}(\pi(a_0) \dots \pi(a_{n-1})) 
+                                                                = f^{\mathfrak{A}}(a_0 \dots a_{n-1})$$
+            \end{itemize}
+
+            (2) A mapping $\pi$ : $A \rightarrow B$, Because $\pi$ is bijection, so $\exists \pi^{-1}$ : $B \rightarrow A$ is bijection.
+            \begin{itemize}
+            \item For any n-ary relation symbol $R \in S$ and $\pi(a_0)=b_0 \dots \pi(a_{n-1})=b_{n-1} \in B$.
+            $$
+            \begin{aligned}
+                (b_0 \dots b_{n-1}) \in R^{\mathfrak{B}} &\Rightarrow (\pi(a_0) \dots \pi(a_{n-1}) \in R^{\mathfrak{B}}\\
+            \end{aligned}
+            $$
+            Because $\pi$ is  bijection, so $(a_0 \dots a_{n-1}) \in R^{\mathfrak{A}}$
+            \item For any n-ary function symaol $f \in S$ and $\pi(a_0)=b_0 \dots \pi(a_{n-1})=b_{n-1} \in B$.
+            
+            $$\pi (f^{\mathfrak{A}}(a_0 \dots a_{n-1})) = f^{\mathfrak{B}}(\pi(a_0) \dots \pi(a_{n-1})) $$
+            so
+            $$\pi^{-1} (f^{\mathfrak{B}}(b_0 \dots b_{n-1})) = f^{\mathfrak{A}}(\pi^{-1}(b_0) \dots \pi^{-1}(b_{n-1})) $$
+            \end{itemize}
+
+            (3) A mapping $\sigma$ : $A \rightarrow B$, $\tau$ : $B \rightarrow C$, $\pi=\tau\sigma$ is bijection.
+            \begin{itemize}
+                \item  For any n-ary relation symbol $R \in S$,
+                $$
+                \begin{aligned}
+                    (a_0 \dots a_{n-1}) \in R^{\mathfrak{A}} &\Rightarrow (\sigma(a_0) \dots \sigma(a_{n-1})\in R^{\mathfrak{B}}\\
+                                                            &\Rightarrow (\tau(\sigma(a_0)) \dots \tau(\sigma(a_{n-1}))\in R^{\mathfrak{C}}\\
+                                                            &\Rightarrow (\pi(a_0) \dots \pi(a_{n-1})\in R^{\mathfrak{C}}\\
+                \end{aligned}
+                $$
+                \item For any n-ary function symaol $f \in S$,
+                $$
+                \begin{aligned}
+                    \pi (f^{\mathfrak{A}}(a_0 \dots a_{n-1})) &= \tau(f^{\mathfrak{B}}(\sigma(a_0) \dots \sigma(a_{n-1}))) \\
+                        &= f^{\mathfrak{C}}(\pi(a_0) \dots \pi(a_{n-1})) \\
+                \end{aligned}
+                $$
+            \end{itemize}
+        \end{solution}
+\end{problem}
+
+\begin{problem} Let $\phi, \psi$, and $\mathcal{X}$ be S-formulas. Prove that:
+
+    (a) $(\phi \lor \psi)  \models \mathcal{X}$ if and only if $\phi \models \mathcal{X}$ and $\psi \models \mathcal{X}$.
+
+    (b) $\models \phi \rightarrow \psi$ if and only if $\phi \models \psi$.
+    \begin{solution}
+        (a) If $\mathfrak{I} \models (\phi \lor \psi)$ and $\mathfrak{I} \models \mathcal{X}$, 
+         then $\mathfrak{I} \models \phi$ and $\mathfrak{I} \models \psi$, so $\phi \models \mathcal{X}$ and $\psi \models \mathcal{X}$。
+        Similarly, if $\mathfrak{I} \models \phi$, $\mathfrak{I} \models \psi$, $\mathfrak{I} \models \mathcal{X}$, $(\phi \lor \psi) \models \mathcal{X}$。
+
+        (b) If $\mathfrak{I} \models \phi \rightarrow \psi$, then $\mathfrak{I} \models \phi$ implies $\mathfrak{I} \models \psi$，so $\phi \models \psi$，and vice versa。
+    \end{solution}
+\end{problem}
+
+\begin{problem} Let $S$ be finite, i.e., containing finitely many relation symbols, function symbols, and
+    constants. Prove that two finite structures $\mathfrak{A}$ and $\mathfrak{B}$ are isomorphic if and only if for any S-sentence
+    $\phi$
+
+    $$\mathfrak{A} \models \phi \Leftrightarrow \mathfrak{B} \models \phi$$
+    
+    \begin{solution}
+        (1) 如果$\mathfrak{A}$ 和 $\mathfrak{B}$ 同构，根据 Lemma 1.5 (The Isomorphism Lemma)这是对的。
+
+        (2) 若$\forall \phi$
+        $$\mathfrak{A} \models \phi \Leftrightarrow \mathfrak{B} \models \phi$$
+
+        假设$A = \{x_0, x_1, \dots ,x_{n-1}\}$,
+
+        我们可以找到这样一个命题$\psi$, 这个命题能够描述所有的命题，并且构造了一个双射$\pi$, 根据之前的构造，其他两个条件是显然的。所以$\mathfrak{A}$和$\mathfrak{B}$是同构的。
+
+        
+    \end{solution}
+\end{problem}
+
+\end{document}

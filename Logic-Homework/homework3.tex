@@ -1,0 +1,55 @@
+\documentclass{ximera}
+
+\usepackage[UTF8]{ctex}
+
+\title{Mathematical Logic}
+\author{于峥}
+
+\begin{document}
+\begin{abstract}
+    homework 3
+\end{abstract}
+
+\begin{problem} \textbf{Exercise 3.1}
+    \begin{solution}
+        \begin{enumerate} [label=\alph*)]
+            \item 
+            $$
+                \begin{aligned}
+                    \exists x\exists y(Pxu \land Pyv) \frac {u,u,u} {x,y,v} 
+                    &= \exists x\exists y[(Pxu \land Pyv)\frac u v]\\
+                    &= \exists x\exists y(Pxu \land Pyu)
+                \end{aligned}
+            $$
+            \item   
+            $$
+                \begin{aligned}
+                    \exists x\exists y(Pxu \land Pyv) \frac {v, fuv} {u,v} 
+                    &= \exists x\exists y[(Pxu \land Pyv)\frac {v, fuv} {u,v} ]\\
+                    &= \exists x\exists y(Pxu\frac v u \land Pyv\frac {fuv} v) \\
+                    &= \exists x\exists y(Pxv \land Pyfuv)
+                \end{aligned}
+            $$
+            \item 
+            $$
+                \begin{aligned}
+                    \exists x\exists y(Pxu \land Pyv) \frac {u,x,fuv} {x,u,v} 
+                    &= \exists w\exists y[(Pwu \land Pyv)\frac {x,fuv} {u,v}] \\
+                    &= \exists w\exists y(Pwu\frac{x}{u} \land Pyv\frac{fuv}{v}) \\
+                    &= \exists w\exists y(Pwx \land Pyfuv) 
+                \end{aligned}
+            $$
+            \item 
+            $$
+                \begin{aligned}
+                    &[\forall x \exists y (Pxy \land Pxu)\lor \exists u fuu\equiv x]\frac{x, fxy}{x,u} \\
+                    =& [\forall x \exists y (Pxy \land Pxu) \frac{x, fxy}{x,u}] \lor [\exists u fuu\equiv x\frac{x, fxy}{x,u}] \\
+                    =& [\forall v \exists w (Pvw \land Pvu) \frac{fxy}{u}] \lor \exists u fuu\equiv x \\
+                    =& \forall v \exists w (Pvw \land Pvfxy) \lor \exists u fuu\equiv x
+                \end{aligned}
+            $$
+        \end{enumerate}
+    \end{solution}
+\end{problem}
+
+\end{document}

@@ -1,0 +1,146 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{CJK}
+\usepackage{float}
+\usepackage{mdframed}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+\providecommand{\ud}[1]{\underline{#1}}
+
+\newmdtheoremenv{thm}{Theorem}
+\newmdtheoremenv{lemma}[thm]{Lemma}
+\newmdtheoremenv{fact}[thm]{Fact}
+\newmdtheoremenv{cor}[thm]{Corollary}
+\newtheorem{eg}{Example}
+\newtheorem{ex}{Exercise}
+\newmdtheoremenv{defi}{Definition}
+\newenvironment{sol}
+  {\par\vspace{3mm}\noindent{\it Solution}.}
+  {\qed \\ \medskip}
+
+\newcommand{\expe}{{\mathsf E}}
+\newcommand{\pr}{{\mathsf{Pr}}}
+
+
+\setlength{\parindent}{0pt}
+%\setlength{\parskip}{2ex}
+\newenvironment{proofof}[1]{\bigskip\noindent{\itshape #1. }}{\hfill$\Box$\medskip}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+\newtheorem*{problem*}{Problem}
+
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{CS477 Combinatorics: Homework 12}
+\author{于峥 518030910437}
+\date{\today}
+
+\maketitle
+
+\begin{problem}
+    在一个学校有 1000 个俱乐部，每个俱乐部有 11 个人，俱乐
+    部之间的成员可能会重复。证明，可以将所有学生分成两组，使得每个俱乐
+    部都同时有来自两组的学生。
+    \begin{sol}
+        我们将俱乐部和学生的关系看成二分图$G = (L \cup R, E)$, $L$代表俱乐部，
+        $R$代表学生，如果学生属于俱乐部那么这两个点之间有边相连。那么我们需要证明的是能够做到将$R$二染色后，使得$L$中每个元素的
+        邻点集合包含两种颜色。
+
+        我们将$R$中的点以$\frac 1 2$的概率随机染成黑白两色。那么存在俱乐部只有一种颜色
+        的邻点的概率
+        $$
+        P \leq 1000 \cdot 2^{-11} \cdot 2 < 1
+        $$
+        所以$1-P > 0$, 因此命题得证。
+    \end{sol}
+\end{problem}
+
+\begin{problem}
+    一个竞赛图是一个每两个点之间恰好有一条边的有向图。
+    证明：对每个 $n$，存在一个竞赛图包含至少 $n!/2^{n−1}$ 条哈密尔顿路。
+    \begin{sol}
+        考虑对$K_n$中的边等概率随机定向。那么$K_n$中哈密尔顿路的期望数量为
+        $E(P) = \frac {n!} {2^{n-1}}$, 该式的意思是考虑每一个排列为哈密顿尔
+        路的概率，因此肯定存在一个竞赛图包含至少 $n!/2^{n−1}$ 条哈密尔顿路。
+    \end{sol}
+\end{problem}
+
+\begin{problem}
+    $G = (V, E)$ 是一个二分图，$|V| = n$，$k > \log_2 n$ 是一个整数。
+在 $G$ 的每个顶点 $v$ 上有一个候选的颜色集合 $C(v)$ 满足 $|C(v)| \geq k$。证明：
+可以给每个点 $v$ 选一个 $C(v)$ 中的颜色，使得 $G$ 中任意相邻两点不同色。
+    \begin{sol}
+        题目条件相当于把所有颜色分为两组，对于每一个左边点的$C$含有至少一个第一组的颜色，
+        右边点的$C$含有至少一个第二组的颜色。对于任意一个点它被分到两组的概率是$\frac 1 2$,
+        那么对于左边每一个颜色集合$C_i$, 如果其中含有第一组的颜色那么$X_i=0$, 否则为$1$。
+        对于右边每一个颜色集合$C_i$, 如果其中含有第二组的颜色那么$X_i=0$, 否则为$1$。
+
+        那么$E(\sum X_i)=\frac n {2^k} < 1$, 所以存在合法的分组。对于每一个点，
+        如果在左边就任选一个第一组的颜色，在右边就选第二组的颜色即可。
+    \end{sol}
+\end{problem}
+
+\begin{problem}
+    图 $G = ([1000], E)$ 中有至多 27000 个三角形。证明：G 中有
+一个 70 点的不含三角形的诱导子图。
+    \begin{sol}
+        我们考虑$G$中所有的三角形，在$\binom{[1000]}{100}$中有$\binom{997}{97}$个集合
+        包含这个三角形。因此所有$\binom{[1000]}{100}$中的元素包含的三角形个数的期望
+        $$
+        E = \frac {{27000} {\binom{997}{97}}} {\binom{1000}{100}} < 26。5
+        $$
+        所以$G$ 中有一个 100个点的三角形数量小于等于26的诱导子图, 从每个三角形中删去1个点，
+        因此图中一定存在大于等于$74$个点的不含三角形的诱导子图。
+
+    \end{sol}
+\end{problem}
+
+\begin{problem}
+    $G = (V, E)$ 是一个 n 阶的、20 正则的简单图。
+    证明：存在 $W \subseteq V$ ，使得 $V - W$ 中任意一个顶点在 $W$ 中至少有一个邻居，
+    并且 $|W| \leq n/5$.
+
+    \begin{sol}
+        不难把题目中的条件转化找到$W \subseteq V$, 成对于每一个点，要么它在$W$中，要么它的的某个邻点在$W$中。
+
+        我们将每个点以概率$p$的加入$S$, 那么$E(|S|)=pn$, 而$T$是那些不满足要求的点，即不在
+        $S$中也没有邻居在$S$中的点。$X_u$为一随机变量，如果点$u$在$T$中值为$1$，否则为$0$。
+        那么$E(|X_u|) \leq (1-p)^{21}$。
+        \begin{align*}
+            E(|S \cup T|) 
+            \leq np + n(1-p)^{21}
+        \end{align*}
+
+        因此取$p=1 - {21^{-\frac 1 {20}}}$, 那么$E(|S\cup T|) < \frac n 5$, 因此存在这样的$W$.
+    \end{sol}
+\end{problem}
+
+\begin{problem}
+    \textbf{HW11}
+    证明：对任意的$k,l$，都存在图$G$使得$\chi(G) > k, g(G) > l$。
+    \begin{sol}
+      由于一个图的色数为$k$意味着将它分为了$k$个不相交的独立集，因此不难得到
+      $$
+      \alpha (G) < \frac {|G|} k \Rightarrow \chi(G) > k
+      $$
+      假设图$G$上每条边以$p$的概率出现，我们记事件$\{ \alpha (G) \geq \frac {|G|} k \}$
+      为$X$, 事件$\{ g(X) \leq l \}$为$Y$。那么我们只需使$P(X) + P(Y) < 1$即可。
+    
+      首先考虑$P(X)$, 图$G$上每条边以$p$的概率出现，记$r=\frac {n} {k}$, 那么
+      $$
+      P(X) \leq \binom{n}{r}(1-p)^{\binom{r}{2}} \leq 2^ne^{-p\binom {r} {2}}
+      $$
+      我们只要让$p \geq \frac n {\binom{r}{2}} = \frac {2k^2} {n - k}$即可。容易看到只要$n$足够大，
+      我们就能让$P(X)$小于任何正常数。
+    
+      再考虑$P(Y)$, 当$n > l$时， $P(Y)$不可能为$1$, 此时无论$P(Y)$为何值，
+      我们都能取足够大的$n$，使得$P(X) + P(Y) < 1$, 因此命题成立。
+    \end{sol}
+    \end{problem}
+\end{document}

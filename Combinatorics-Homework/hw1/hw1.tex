@@ -1,0 +1,258 @@
+\documentclass[UTF8]{ctexart}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{CJK}
+\usepackage{float}
+\usepackage{mdframed}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+\providecommand{\ud}[1]{\underline{#1}}
+
+\newmdtheoremenv{thm}{Theorem}
+\newmdtheoremenv{lemma}[thm]{Lemma}
+\newmdtheoremenv{fact}[thm]{Fact}
+\newmdtheoremenv{cor}[thm]{Corollary}
+\newtheorem{eg}{Example}
+\newtheorem{ex}{Exercise}
+\newmdtheoremenv{defi}{Definition}
+\newenvironment{sol}
+  {\par\vspace{3mm}\noindent{\it Solution}.}
+  {\qed \\ \medskip}
+
+\newcommand{\ov}{\overline}
+\newcommand{\ca}{{\cal A}}
+\newcommand{\cb}{{\cal B}}
+\newcommand{\cc}{{\cal C}}
+\newcommand{\cd}{{\cal D}}
+\newcommand{\ce}{{\cal E}}
+\newcommand{\cf}{{\cal F}}
+\newcommand{\ch}{{\cal H}}
+\newcommand{\cl}{{\cal L}}
+\newcommand{\cm}{{\cal M}}
+\newcommand{\cp}{{\cal P}}
+\newcommand{\cs}{{\cal S}}
+\newcommand{\cz}{{\cal Z}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\la}{\leftarrow}
+\newcommand{\Ra}{\Rightarrow}
+\newcommand{\dist}{\mbox{\rm dist}}
+\newcommand{\bn}{{\mathbb N}}
+\newcommand{\bz}{{\mathbb Z}}
+
+\newcommand{\expe}{{\mathsf E}}
+\newcommand{\pr}{{\mathsf{Pr}}}
+
+
+\setlength{\parindent}{0pt}
+%\setlength{\parskip}{2ex}
+\newenvironment{proofof}[1]{\bigskip\noindent{\itshape #1. }}{\hfill$\Box$\medskip}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+\newtheorem*{problem*}{Problem}
+
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{CS477 Combinatorics: Homework 1}
+\author{于峥 518030910437}
+\date{Mar. 4, 2020}
+
+\maketitle
+
+\begin{problem}
+令$A = [5]$, $B = [3]$, $C = [3]$。
+
+(a) 列举一个$(A^B)^C$的元素。
+
+(b) 列举一个$A^{B\times C}$的元素。
+\begin{sol}
+
+  (a) $f: C \rightarrow A^B$, $\forall x\in C, f(x) = g$, 
+  其中$g:B\rightarrow A$, $\forall x\in B, g(x)=1$。
+
+  写成有序组的形式 $((1,1,1),(1,1,1),(1,1,1))$。
+
+  (b) $f: B \times C \rightarrow A$, $\forall x \in B \times C$, $f(x)=1$，
+
+  写成矩阵的形式
+  $$
+  \begin{bmatrix}
+    1 & 1 & 1 \\
+    1 & 1 & 1 \\
+    1 & 1 & 1 
+  \end{bmatrix}
+  $$
+
+\end{sol}
+
+\end{problem}
+
+\begin{problem}
+在空间中有$n$个不同的蓝点和$m$个不同的红点，在每个蓝点和每个红点的中点画上一个紫色的点。（紫色的点有可能和某个红点或者蓝点重合。）
+
+(a) 求紫色点的数量的最小值。
+
+(b) 给出并证明上述取到最小值时的蓝点和红点分布的充要条件。
+\begin{sol}
+  (a) 蓝色点集合为$A$, 红色点集合为$B$, 由于中点公式容易发现
+  紫色点数量$=|A+B|$。注意到如果把红点或蓝点整体平移，紫点的数量不会改变。所以我们通过平移
+  让这些点两两不同。
+  
+  我们可以给过每个点做一条直线使得这些直线互相平行，由于点是有限的，
+  能够找到某个斜率，让每条直线只经过一个点，我们作这些直线的垂线为x轴，随意选定方向和原点。
+  我们把每个点映射到点所在的x坐标，那么所有点对应的x坐标互不相同。
+  
+  将红蓝点映射到$x$坐标形成的集合记为$A'$, $B'$, 下证 $|A'+B'|\geq m+n-1$。
+  
+  
+  我们知道实数集合加法满足$|A+B|\geq|A'+B'|\geq m+n-1$，因此至少有$m+n-1$个紫点。
+  $$
+  \begin{aligned}
+    A' = \{a_1, a_2, a_3, \dots, a_n\} \\
+    B' = \{b_1, b_2, b_3, \dots, b_m\} \\
+    a_1 < a_2 < \dots < a_n \\
+    b_1 < b_2 < \dots < b_m
+  \end{aligned}
+  $$
+  那么有$a_1 + b_1 < a_2 + b_1 < \dots < a_n + b_1 < a_n + b_2 < \dots < a_n + b_m$.
+  这里已经有$n+m-1$个数, 所以集合的和大于$n+m-1$。
+
+  (b) 红点和蓝点分别位于两条平行直线上，在直线上等距分布，并且相邻蓝点的距离与相邻红点相同。或者至少有一种颜色的点只有一个。
+  
+  \textbf{必要性} : 代入验证发现可取到最小值。
+
+  \textbf{充分性} :
+  只考虑$n>1,m>1$的情况，思考上一题证明中等号取到的条件, 对于$a_{n-1}+b_2$必与
+  $a_1 + b_1 , a_2 + b_1 , \dots , a_n + b_1 , a_n + b_2 , \dots , a_n + b_m$
+  中某个数相同，我们将这些数写成矩阵形式，
+  $$
+  \begin{bmatrix}
+    a_1 + b_1 & a_2 + b_1 & \dots & a_n + b_1 \\
+    a_1 + b_2 & a_2 + b_2 & \dots & a_n + b_2 \\
+    \dots     &     \dots & \dots & \dots     \\
+    a_1 + b_m & a_2 + b_m & \dots & a_n + b_m \\
+  \end{bmatrix}
+  $$
+  显然$a_{n-1}+b_2$必须要与所在位置右上的数相同，因为这个矩阵行列都是单调递增的。进而一次考虑
+  其他的数可以发现每个反斜线上的数都是相等的。进而可以得出这样的结论，
+  若将$a_i$，$b_i$看成数列，那么这两个数列都是等差数列，且差相同。注意到$a_i$，$b_i$分别为红蓝点
+  的横坐标，对于横坐标加和相同的红蓝点对，纵坐标加和也必须满足，否则点数必将大于$m+n-1$。因此
+  我们可以得到点的分布。
+
+  
+\end{sol}
+\end{problem}
+
+\begin{problem}
+证明：对任意的自然数$n$，
+\[
+\sum_{r=0}^n r \binom{n}{r} = n 2^{n-1}.
+\]
+\begin{sol}
+这个公式右边的组合意义为从$n$个人中选一个队长, 然后从剩下的$n-1$个人中选择队员。
+而左边的式子则是先枚举队伍中有几个人，选择了队伍中的人后再选择队长。
+
+归纳法：$n=0,1$时容易验证等式成立，$n>1$时
+$$
+\begin{aligned}
+  \sum_{r=0}^n r \binom{n}{r} 
+  &= n + \sum_{r=1}^{n-1}r\binom{n-1}{r}+r\binom{n-1}{r-1}\\
+  &= n + (n-1)2^{n-2}+\sum_{r=0}^{n-2}(r+1)\binom{n-1}{r}\\
+  &= (n-1)2^{n-2}+\sum_{r=0}^{n-1}(r+1)\binom{n-1}{r}\\
+  &= (n-1)2^{n-2}+(n-1)2^{n-2}+2^{n-1}\\
+  &= n2^{n-1}
+\end{aligned}
+$$
+
+\end{sol}
+\end{problem}
+
+\begin{problem}
+考虑所有的有序组$\alpha = (A_1, A_2, \dots, A_k)$，其中$A_i \subseteq [n]$，
+定义$S(\alpha) = |A_1 \cup A_2 \dots \cup A_k|$。所有这样的有序组构成的集合为$\mathcal{U}$。
+
+(a) 计算$|\mathcal{U}|$。
+
+(b) 计算
+\[
+\sum_{\alpha \in \mathcal{U}} S(\alpha).
+\]
+
+\begin{sol}
+  (a) $A_i$有$2^n$种选择, 那么$\alpha$有$2^{nk}$种选择。$|\mathcal{U}|=2^{nk}$。
+
+  (b) 考虑有多少个$\alpha$满足$S(\alpha)=i$, 首先$A_1 \cup A_2 \dots \cup A_k$有
+  $\binom{n}{i}$种可能，对于其中的每一个元素，在$A_1,A_2,\cdots,A_k$中至少出现一次，所以有
+  $2^k-1$中可能，则存在$(2^k-1)^i\binom{n}{i}$个$\alpha$满足$S(\alpha)=i$。
+
+  我们还可以从另一种角度来思考这个问题，我们考虑$[n]$中的每个元素被计入了答案几次，首先指定
+  一个元素，只要它在$A_1,A_2,\cdots,A_k$中至少出现一次, 那么它就有1的贡献，而其他元素的出现与否不影响
+  它对答案的贡献，所以每个$[n]$中的元素都有$(2^k-1)2^{k(n-1)}$的贡献, 则得出
+  $$
+  \sum_{\alpha \in \mathcal{U}}S(\alpha)=\sum_{i=0}^n i(2^k-1)^i\binom{n}{i}=(2^k-1)n2^{k(n-1)}
+  $$
+\end{sol}
+\end{problem}
+
+\begin{problem}
+在
+\[
+\binom{2020}{0}, \binom{2020}{1}, \dots, \binom{2020}{2020}
+\]
+中有多少个奇数？
+\begin{sol}
+  $\binom{n}{0}，\binom{n}{1},\cdots,\binom{n}{n}$中奇数的数量取决于$n$的二进制位上$1$的个数，
+  证明这一点可以使用Lucas定理,$p$为素数,则有
+  $$
+  \begin{aligned}
+    \binom{n}{m}=&\prod_{i=0}^k\binom{m_i}{n_i}\pmod p\\
+    m =& m_kp^k+m_{k-1}p^{k-1}+\cdots+m_1p+m_0\\
+    n =& n_kp^k+n_{k-1}p^{k-1}+\cdots+n_1p+n_0\\
+  \end{aligned}  
+  $$
+
+  可以取$p$为$2$,则$m_i$为0时，$n_i$必须为0才能为奇数，那么只有$n$ \& $m = m$时$\binom{n}{m}$为奇数。
+
+  $2020=11111100100_2$, 有$2^7$个奇数。
+\end{sol}
+\end{problem}
+
+\begin{problem}(*)
+接课上的定义
+
+(a) 证明平面上至多可以画可数个8。
+
+(b) 证明平面上至多可以画可数个Y。
+\begin{sol}
+
+  (a) 对于平面上的每个8，我们可以从8的两个o中各任取一个有理点$A,B$，组成集合(无序点对)$\{A,B\}$, 来表示这个8，
+  由于8不能相交，所以不可能有点对能同时表示两个8。由于有理点的可数性，这样的无序点对也可数，进而8也可数。
+  
+  (b) 值得注意的是，曲线上不一定存在有理点，所以无法用上题的方法。
+
+  我们把Y的中心点记为O, 三条线段的终点为$a,b,c$, 三点绕$O$点方向为逆时针。
+  我们找到三个不相交有理圆(圆心为有理点，半径为有理数)，圆心分别为$A, B, C$。并且这三个圆
+  分别不与Y的另外两条线相交。
+
+  假设有两个Y($Y_1, Y_2$)共用三个相同的有理圆，我们修改两个Y伸出的三条线，
+  这三条线碰到圆之后直接连向圆心，那么$AY_1BY_2$构成闭环，由于$a_1, b_1, c_1$,
+  $a_2, b_2, c_2$都必须是逆时针，可以观察到$c_1$. $c_2$不可能都在
+  $AY_1BY_2$这个闭环内，这意味这圆C必然与这个闭环相交，则产生矛盾。
+
+  所以不会有两个Y共用三个相同的有理圆。而有理圆是可数的，所以Y是可数的。
+
+  我们可以容易的用第二问的结论证明第一问, 首先容易用相同方法证明平面上只能放
+  可数个+,可以把8的两个圈各剪开一个缝，那么8的放置就是+的放置的特殊情况，因此
+  8是可数的。
+
+\end{sol}
+\end{problem}
+
+\end{document}
+

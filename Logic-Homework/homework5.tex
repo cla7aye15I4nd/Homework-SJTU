@@ -1,0 +1,101 @@
+\documentclass{ximera}
+
+\usepackage[UTF8]{ctex}
+
+\begin{document}
+\title{Mathematical Logic}
+\author{于峥}
+
+\begin{abstract}
+    homework 5
+\end{abstract}
+\maketitle
+
+\begin{problem}
+    Let
+    $$
+        \Phi := \{ v_0 \equiv t | t \in T^S \} 
+        \cup \{ \exists v_0 \exists v_1 \neg v_0 \equiv v_1 \}
+    $$
+    Prove that $\Phi$ is consistent, but there is no 
+    consistent $\Phi \subseteq \Psi \subseteq L^S$ with which contains witnesses.    
+    \begin{solution}
+        We just construct $\mathfrak{I}$,
+        $$
+        \mathfrak{I} = \{ \{ 0^{\mathfrak{I}}, 1^{\mathfrak{I}} \}, S^{\mathfrak{I}},\beta \}
+        $$
+
+        For any function $f$, relation $R$:
+
+        Let $f^{\mathfrak{I}}(v_0,v_1,\cdots v_{n-1})=0^{\mathfrak{I}}$, $R^{\mathfrak{I}}v_0v_1\cdots v_{n-1}=0^{\mathfrak{I}}$。
+        
+        Then $\Phi \frac {0, 1} {v_0, v_1} \models \Phi$。
+        So $\Phi$ is satisfiable, it is consistent.
+
+        If $\Psi$ is contains witnesses, then for any variable $x$, and S-formula $\varphi \in \Psi$。
+        $\Psi \vdash \Big( \exists x \varphi \rightarrow \varphi \frac t x\Big)$
+
+        So $\Psi \vdash \Big(\exists v_0 \exists v_1 \neg v_0 \equiv v_1 \rightarrow \exists v_1 \neg t \equiv v_1 \Big)$, then 
+        $\Psi \vdash \exists v_1 \neg t \equiv v_1$。
+
+        But $\Psi \vdash \{ v_0 \equiv t | t \in T^S \} $。
+
+        So we can know $\Psi$ is inconsistent。
+    \end{solution}
+\end{problem}
+
+\begin{problem}
+    Let $\mathfrak{A}$ and $\mathfrak{B}$ be two S-structures. 
+    $\mathfrak{A}$ mapping $h$ : $\mathfrak{A} \rightarrow \mathfrak{B}$ 
+    is a homomorphism from $\mathfrak{A}$ to $\mathfrak{B}$ if the following properties hold.
+
+    (1) For every n-ary relation symbol $R \in S$ and $a_1, \cdots, a_n \in A$ we have
+    $$
+    (a_1,\cdots , a_n) \in R^{\mathfrak{A}} \text{ implies } (h(a_1),  \cdots , h(a_n)) \in R^\mathfrak{B}.
+    $$
+    (2) For every n-ary function symbol $R \in S$ and $a_1, \cdots , a_n \in A$ we have
+    $$
+    h(f^\mathfrak{A}(a_1,\cdots, a_n)) = f^\mathfrak{B}(h(a_1), \cdots, h(a_n)).
+    $$
+    (3) For every constant $c \in S$
+    $$
+    h(c^{\mathfrak{A}}) = c^{\mathfrak{B}}.
+    $$
+    Now let $\Phi \subseteq L^S$ and $\mathfrak{A}$ be an S-structure with $\mathfrak{A} \models \Phi$
+    . Prove that there is a homomorphism from the term model $\mathfrak{T}^{\Phi}$ to $\mathfrak{A}$. 
+    \begin{solution}
+        We define h
+        $$
+        \begin{aligned}
+            h: T^{\Phi} &\mapsto A \\
+               \overline{t} &\mapsto \mathfrak{A}(t)
+        \end{aligned}
+        $$
+        (1) For every n-ary relation symbol $R \in S$ and $\overline{t_1}, \cdots, \overline{t_n} \in T^{\Phi}$:
+        $$
+        \begin{aligned}
+            (\overline{t_1},\cdots,\overline{t_n}) \in R^{\mathfrak{T}^{\Phi}} 
+            &\Rightarrow \Phi \vdash Rt_1,\cdots,t_n\\
+            &\Rightarrow \Phi \models Rt_1,\cdots,t_n\\
+            &\Rightarrow \mathfrak{A} \models Rt_1,\cdots,t_n \\
+            &\Rightarrow (\mathfrak{A}(t_1),\cdots,\mathfrak{A}(t_n)) \in R^{\mathfrak{I}}
+        \end{aligned}
+        $$
+        (2) For every n-ary function symbol $f \in S$ and $\overline{t_1}, \cdots, \overline{t_n} \in T^{\Phi}$:
+        $$
+        \begin{aligned}
+            h(f^{\mathfrak{T}^\Phi}(\overline{t_1},\cdots,\overline{t_n}))
+            &= h(\overline{f t_1\cdots t_n}) \\
+            &= \mathfrak{A}(f t_1\cdots t_n) \\
+            &= f^{\mathfrak{A}}(\mathfrak{A}(t_1),\cdots,\mathfrak{A}(t_n)) \\
+            &= f^{\mathfrak{A}}(h(\overline{t_1}),\cdots, h(\overline{t_n})))
+        \end{aligned}
+        $$
+        (3) For every constant $c \in S$
+        $$h(c^{\mathfrak{T}^{\Phi}})=h(\overline{c})=\mathfrak{A}(c)=c^{\mathfrak{A}}$$
+
+        So $h$ is a homomorphism from the term model $\mathfrak{T}^{\Phi}$ to $\mathfrak{A}$. 
+    \end{solution}
+\end{problem}
+
+\end{document}

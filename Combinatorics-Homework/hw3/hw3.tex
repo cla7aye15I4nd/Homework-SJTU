@@ -1,0 +1,331 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{CJK}
+\usepackage{float}
+\usepackage{mdframed}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+\providecommand{\ud}[1]{\underline{#1}}
+
+\newmdtheoremenv{thm}{Theorem}
+\newmdtheoremenv{lemma}[thm]{Lemma}
+\newmdtheoremenv{fact}[thm]{Fact}
+\newmdtheoremenv{cor}[thm]{Corollary}
+\newtheorem{eg}{Example}
+\newtheorem{ex}{Exercise}
+\newmdtheoremenv{defi}{Definition}
+\newenvironment{sol}
+  {\par\vspace{3mm}\noindent{\it Solution}.}
+  {\qed \\ \medskip}
+
+\newcommand{\ov}{\overline}
+\newcommand{\ca}{{\cal A}}
+\newcommand{\cb}{{\cal B}}
+\newcommand{\cc}{{\cal C}}
+\newcommand{\cd}{{\cal D}}
+\newcommand{\ce}{{\cal E}}
+\newcommand{\cf}{{\cal F}}
+\newcommand{\ch}{{\cal H}}
+\newcommand{\cl}{{\cal L}}
+\newcommand{\cm}{{\cal M}}
+\newcommand{\cp}{{\cal P}}
+\newcommand{\cs}{{\cal S}}
+\newcommand{\cz}{{\cal Z}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\la}{\leftarrow}
+\newcommand{\Ra}{\Rightarrow}
+\newcommand{\dist}{\mbox{\rm dist}}
+\newcommand{\bn}{{\mathbb N}}
+\newcommand{\bz}{{\mathbb Z}}
+
+\newcommand{\expe}{{\mathsf E}}
+\newcommand{\pr}{{\mathsf{Pr}}}
+\newenvironment{pf}
+  {\par\vspace{3mm}\noindent{\it pf}.}
+
+\setlength{\parindent}{0pt}
+%\setlength{\parskip}{2ex}
+\newenvironment{proofof}[1]{\bigskip\noindent{\itshape #1. }}{\hfill$\Box$\medskip}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+\newtheorem*{problem*}{Problem}
+
+\pagenumbering{gobble}
+
+\begin{document}
+
+\author{于峥 518030910437}
+\title{CS477 Combinatorics: Homework 3}
+\date{\today}
+
+\maketitle
+
+\begin{problem}
+对任意的$n$，定义$D_k = \binom{n}{k+1} - \binom{n}{k}$。
+求$k^*$使得$D_{k^*}$在所有的$D_k$中取值最大。
+\begin{sol}
+    \begin{align*}
+        r(k)=\frac {D_{k}} {D_{k-1}} 
+        &= \frac {\binom{n}{k+1} - \binom{n}{k}} {\binom{n}{k} - \binom{n}{k-1}} \\
+        &= \frac {\frac {n-2k-1} {k+1} \binom{n}{k}} {\frac {n-2k+1} {k} \binom{n}{k-1}} \\
+        &= \frac {(n-2k-1)(n-k+1)} {(n-2k+1)(k+1)}
+    \end{align*}
+    为了$D_k > 0$, 我们只关心$0 < k \leq \frac n 2$的情况。
+    
+    在这个范围内，$\frac {n-2k-1} {n-2k+1}$和
+    $\frac {n-k+1} {k+1}$都是递减的
+    所以在$k$在此范围内比值是递减的。
+
+    因此比值为1的时候，$D_k$最大,$k = \frac 12 (n - \sqrt{n+2})$，因此
+
+    特别的当$n = 1$时， $k^*=0$。
+    
+    当$n + 2$是完全平方数的时候，$k^* = \frac {n - \sqrt{n+2}} 2, \frac {n - \sqrt{n+2}} 2-1$
+
+    否则
+    $$k^*=\left\lfloor \frac {n - \sqrt{n+2}} 2 \right\rfloor$$
+    时取到最大值。
+\end{sol}
+\end{problem}
+
+\newpage
+\begin{problem}
+集合$A_0=\{0\}$，$A_1=\{1\}$，$A_{n+2} = (A_1 + A_{n+1}) \Delta A_{n}$。证明有无穷多个$n$使得$|A_n|=1$。
+    \begin{sol}
+        我们可以证明当$n$为$2^k-1$的形式的时候，$|A_n|=1$。
+
+        从另一个角度进行观察，我们将集合看成多项式，将集合操作转化成多项式操作，
+        让$B_0(x) = 1, B_1(x) = x$, $B_{n+2}(x)=xB_{n+1}(x) + B_n(x)$。
+        其中$B_i(x)$是定义在$GF(2)$上的多项式。
+
+        可以归纳证明$B_i(x)=\sum_{u \in A_i} x^u$，
+        首先$n=0,1$时容易验证满足，
+        并且若小于等于$n+1$时满足, $A_1 + A_{n+1}$相当于将$A_{n+1}$中所有元素加一，
+        而$xB_n(x)$就是将每一项的幂次加一。而集合的对称差操作，多项式相加后由于是定义在
+        $GF(2)$上，共有的项会被消去。因此$n+2$时满足。
+
+        进而由于$A_n$必然包含$n$, 所以当$|A_n|=1$时，$B_n(x) = x^n$，
+        进而证明$B_i(x)$有如下性质, 令$C_i(x)=B_{i-1}(x)$
+        \begin{align*}                
+            C_{2n}(x)&=xC_n(x)^2 \\
+            C_{2n+1}(x)&=(C_n(x)+C_{n+1}(x))^2
+        \end{align*}
+        
+        同样进行归纳证明法，$n=1,2,3,4$可以验证是满足的，若$1\sim 2n$都满足，那么
+        \begin{align*}
+            C_{2n+1}(x)
+            &=xC_{2n}(x)+C_{2n-1}(x) \\
+            &=x^2C_{n}(x)+(C_{n-1}(x)+C_n(x))^2 \\
+            &=C_n(x)^2 + (x^2C_n(x)+C_{n-1}(x))^2\\
+            &=C_n(x)^2 + C_{n+1}(x)^2 \\
+            &=(C_n(x) + C_{n+1}(x))^2 \\
+        \end{align*}
+        \begin{align*}
+            C_{2n+2}(x)
+            &=xC_{2n+1}(x)+C_{2n}(x) \\
+            &=x(C_n(x)+C_{n+1}(x))^2+xC_n(x)^2\\
+            &=xC_{n+1}(x)^2
+        \end{align*}
+        因此$2n+1,2n+2$也满足这一性质。不难发现$C_2n(x)$的项数永远和$C_n(x)$相同，而
+        $C_1(x)$只有一项，所以$C_{2^k}(x)$项数为一,进而$B_{2^k-1}(x)$项数为1，所以
+        当$n$为$2^k-1$的形式的时候，$|A_n|=1$。
+
+    \end{sol}
+\end{problem}
+
+\begin{problem}
+给定正整数$n, r, s$，有多少个$[2n]$的子集恰好包含$r$个奇数和$s$个偶数，且没有任何两个相邻的元素？
+    \begin{sol}
+        \begin{lemma}
+            将$r$个元素放到$n$个位置中，每个位置可以放任意个，方案数为：
+            $$\binom{n+r-1}{n-1}$$
+        
+            \begin{pf}
+                假设将元素放置好后，在每个位置再额外放一个元素。这就相当于将
+                $n+r$个元素放到$n$个位置中，每个位置至少放一个的方案。我们可以考虑将这些
+                元素排成一列，在其中插入$n-1$个板，分成$n$份的方案为$\binom{n+r-1}{n-1}$。
+            \end{pf}    
+        \end{lemma}
+        我们可以这样构造集合，首先可以将问题看成将$r$个$10$，$s$个$01$，$n-r-s$个$00$
+        拼成长度为$2n$的$01$串。我们首先只考虑$10$和$00$，有$\binom{n-s}{r}$种方法，将他们
+        拼起来。然后将$01$插入到其中，由于每个$10$的前面不能放$01$，这相当于有
+        $s$个元素，放到$n-s-r+1$个位置中，每个位置可以放任意个，根据\textbf{Lemma 1}, 这有$\binom{n-r}{n-s-r}$种方法。
+        得到答案:
+        $$\binom{n-r}{s}\binom{n-s}{r}$$
+    \end{sol}
+\end{problem}
+
+\begin{problem}
+证明：平面上存在$13^3 = 2197$个不同的点，使得它们之间有至少12345对的距离为13。
+\begin{sol}
+    这个问题可以转化成考虑找到一个平面上$n$个点,$m$条边的图，使得每条边的长度都相同。本题要求$n\leq 2197$，
+    $m \geq 12345$。
+
+    我们可以考虑Hypercube graph是可能满足要求的，因为Hypercube graph有$2^n$个点，$2^{n-1}n$条边，边的密度比较高。
+    并且在平面上画出 Hypercube graph，并且让每条边的长度相同是容易(我们让边的长度是单位长度)。因为首先$Q_1$容易画出，而要画出$Q_n$
+    只需将$Q_{n-1}$平移单位距离再将对应的点连上即可。
+    
+    然而Hypercube依然难以满足要求，我们可以对Hypercube进行一些修改。令$G_1$为一个边长为单位长度的
+    等边三角形，$G_{n+1}$由$G_{n}$通过以下步骤构造出来:
+
+    a) 将$G_n$向两个方向移动单位距离，并且两个方向的夹角为$60$度。
+
+    b) 把生成的三个图的对应点连起来，可以发现对应点构成一个等边三角形。
+
+    还需要说明的细节是，一定存在这样的方向让平移后的点与之前的不重合。这是因为方向的选择有无限种，
+    然而平面上的点是有限的。
+
+    因此$G_n$的所有边长度相同，而$G_n$的点数$V_n=3^n$, 边数满足$E_n = 3E_{n-1} + V_n=n3^n$。
+    注意到边和点的比值为$n$, 比Hypercube更强。 算出当$n=7$时，有$2187$个点，$15309$条边，满足题目要求。
+
+    这种构造的本质就是将等边三角形的图作笛卡尔积，事实上我们也可以通过对不同的图形作笛卡尔积
+    来达到同样的目的。
+
+    关于"The maximum number of occurrences of the same distance among n points in the plane"
+    似乎是个未解问题，我查到的上界是$cn^{4/3}$。用这题笛卡尔积的思路能做到的最好情况
+    应该都是$kn$的。其中$k$是初始图形的点和边的比例。
+    
+\end{sol}
+\end{problem}
+
+\begin{problem}
+如果人和人之间的朋友关系是相互的。证明：在任意100个人中，有两个人使得他们的共同的朋友有偶数个。
+\begin{sol}
+    我们证明任意偶数个人中存在两个人的公共朋友数为偶数。
+
+    1) 若存在一个人$P$有奇数个朋友$Q_1, Q_2, \dots, Q_n$, 设$PQ_i$
+    为$P$与$Q_i$的公共朋友数。如$Q_i$之间没有朋友关系，那么所有$PQ_i$为$0$是偶数。
+
+    
+    $Q_i$之间每增加一对朋友关系，那么$PQ_i(i=1,2,\dots,n)$就有两个数的奇偶性改变。
+    然而想要让$PQ_i$全部为奇数必须只能进行奇数次奇偶性改变。因此最后必然存在一个$Q_i$
+    与$P$的公共朋友为偶数。
+
+    2) 若所有人的朋友都是偶数个，假设$P$的朋友集合为$A$, 其他人的集合为$B$,
+    则$|A|$是偶数，$|B|$是奇数。
+    
+    $\forall Q \in B$, 如果$Q$在$A$中有偶数个朋友，
+    那么$PQ$有偶数个公共朋友。
+    
+    否则$Q$在$A$中有奇数个朋友，那么$Q$在$B$中也有奇数个朋友，
+    由于$Q$是任选的，那么把$B$看成一个奇数个点的子图，每个点的度数都是奇数，那么度数
+    和也是奇数，然而无向图的度数和必然为偶数，产生矛盾。
+\end{sol}
+\end{problem}
+
+\begin{problem} (*)
+在一个$n \times n$的方格表的每个格子里填上一个正整数，使得每个数可以整除它上面的数（如果有的话），也可以整除它右边的数（如果有的话），并且整个表右上角格子
+里填的数是$T$。当$T=2$、$T=4$、$T=30$、$T = 1000$时，这样的填法各有多少种？
+
+\begin{sol}
+    我们可以这样考虑，
+    设$f_n(T)$为该问题答案。将$T$进行质因数分解，
+    例如$T=p_1^{k_1}p_2^{k_2}\dots p_n^{k_n}$。 
+    可以发现不同质因子之间没有影响，即$f_n(T)=f_n(p_1^{k_1})f_n(p_2^{k_2})\dots f_n(p_n^{k_n})$。
+
+    进而我们只需要考虑$p^k$形式的$T$, 由于当$k$相同时得到的答案相同，所以我们将
+    问题转化成在方格中填$0$到$k$让每行每列都递减，为了去掉右上角
+    必须填$k$的限制，记$h_n(k)=f_n(p^k)$, 可以考虑计算$g_n(k)=\sum_{i=0}^kh_n(i)$，即计算
+    前缀和。
+
+    对于这$k$条路径，我们考虑将第$i$条向上和向右都平移$i-1$格，那么这$k$条路径将严格不相交。题目
+    转化成了从$(0,0),(-1,1)\dots(1-k,k-1)$走到$(n,n),(n-1,n+1),(n-2,n+2)\dots(n-k+1,n+k-1)$有
+    多少种走法让路径不相交。使用LGV引理。
+
+    \begin{lemma}
+        对于有向无环图，
+        $e(u, v)$表示从$u$走到$v$所有路径的边权和。
+
+        $\omega(P)$表示$P$这条路径上所有边的边权之积。
+
+        起点集合$A$，是有向无环图点集的一个子集，大小为$n$。
+
+        终点集合$B$，也是有向无环图点集的一个子集，大小也为$n$。
+
+        一组$A \rightarrow B$的不相交路径$S$： $S_i$是一条从$A_i$到$B_{\sigma(S)_i}$的路径
+        （$\sigma(S)$是一个排列），对于任何$i \not= j$，$S_i$和$S_j$没有公共顶点。
+
+        $N(\sigma)$表示排列$\sigma$的逆序对个数。
+
+        $$
+        M = 
+        \begin{pmatrix}
+            e(A_1,B_1) & e(A_1,B_2) & \dots & e(A_n,B_n)\\
+            e(A_2,B_1) & e(A_2,B_2) & \dots & e(A_2,B_n)\\
+            \vdots & \vdots & \ddots & \vdots \\
+            e(A_n,B_1) & e(A_n,B_2) & \dots & e(A_n,B_n)
+        \end{pmatrix}
+        $$
+        $$\det(M)=\sum_{S:A\rightarrow B}(-1)^{N(\sigma(S))}\prod_{i=1}^n \omega(S_i)$$
+    \end{lemma}
+    将边权设为$1$,由于对应关系是$i \rightarrow i$，所以答案就是$g_n(k)=\det(M)$,
+
+    当$k=0$时, 
+    $$g_n(0) = h_n(0) = 1$$。
+
+    当$k=1$时, 
+    \begin{align*}
+        g_n(1) &= \binom{2n}{n} \\
+        h_n(1) &= \binom{2n}{n} - 1
+    \end{align*}
+    
+    因为对于任意一条从左下到右上的
+    路径的上方放$1$,下方放$0$,这对应了一种放置方法。而每种放置方法的边界也可以看成
+    一条路径。
+
+    当$k=2$时, 
+    $$
+    M = 
+    \begin{bmatrix}
+        \binom{2n}{n} & \binom{2n}{n-1} \\
+        \binom{2n}{n-1} & \binom{2n}{n} 
+    \end{bmatrix}
+    $$
+    \begin{align*}
+    g_n(2) &= \binom{2n}{n}^2 - \binom{2n}{n-1}^2 \\
+    h_n(2) &= \frac {1} {n+1}\binom{2n}{n}\binom{2n}{n-1}
+    \end{align*}
+
+    当$k=3$时, 
+    $$
+    M = 
+    \begin{bmatrix}
+        \binom{2n}{n} & \binom{2n}{n-1} & \binom{2n}{n-2} \\
+        \binom{2n}{n-1} & \binom{2n}{n} & \binom{2n}{n-1} \\
+        \binom{2n}{n-2} & \binom{2n}{n-1} & \binom{2n}{n} 
+    \end{bmatrix}
+    $$
+    \begin{align*}
+        g_n(3) &= \frac 2 {(n+1)^2(n+2)}\binom{2n}{n}\binom{2n+1}{n}\binom{2n+2}{n} \\
+        h_n(3) &= \frac 1 {n+1}\binom{2n}{n}\binom{2n+1}{n} \left[ \frac {2} {(n+1)(n+2)}\binom{2n+2}{n}-1 \right]
+    \end{align*}
+
+    对于任意的$k$,有
+    $$g_n(k)=\prod_{i=1}^k\prod_{j=1}^n\frac {n+i+j-1} {i+j-1}$$
+
+    因此$T=2$时，答案为
+    $$
+        h_n(1) = \binom{2n}{n} - 1
+    $$
+    $T=4$时，答案为
+    $$
+        h_n(2) = \frac {1} {n+1}\binom{2n}{n}\binom{2n}{n-1}
+    $$
+    $T=30=2\times 3\times 5$时，答案为
+    $$
+        h_n(1)^3 = \left( \frac {1} {n+1}\binom{2n}{n}\binom{2n}{n-1} \right)^3
+    $$
+    $T=1000=2^3 \times 5^3$时，答案为
+    $$
+        h_n(3)^2 = \left( \frac 1 {n+1}\binom{2n}{n}\binom{2n+1}{n} \left[ \frac {2} {(n+1)(n+2)}\binom{2n+2}{n}-1 \right] \right)^2
+    $$
+\end{sol}
+\end{problem}
+
+\end{document}
+

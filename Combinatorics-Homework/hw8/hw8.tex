@@ -1,0 +1,219 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{CJK}
+\usepackage{float}
+\usepackage{mdframed}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+\providecommand{\ud}[1]{\underline{#1}}
+
+\newmdtheoremenv{thm}{Theorem}
+\newmdtheoremenv{lemma}[thm]{Lemma}
+\newmdtheoremenv{fact}[thm]{Fact}
+\newmdtheoremenv{cor}[thm]{Corollary}
+\newtheorem{eg}{Example}
+\newtheorem{ex}{Exercise}
+\newmdtheoremenv{defi}{Definition}
+\newenvironment{sol}
+  {\par\vspace{3mm}\noindent{\it Solution}.}
+  {\qed \\ \medskip}
+
+\newcommand{\ov}{\overline}
+\newcommand{\ca}{{\cal A}}
+\newcommand{\cb}{{\cal B}}
+\newcommand{\cc}{{\cal C}}
+\newcommand{\cd}{{\cal D}}
+\newcommand{\ce}{{\cal E}}
+\newcommand{\cf}{{\cal F}}
+\newcommand{\ch}{{\cal H}}
+\newcommand{\cl}{{\cal L}}
+\newcommand{\cm}{{\cal M}}
+\newcommand{\cp}{{\cal P}}
+\newcommand{\cs}{{\cal S}}
+\newcommand{\cz}{{\cal Z}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\la}{\leftarrow}
+\newcommand{\Ra}{\Rightarrow}
+\newcommand{\dist}{\mbox{\rm dist}}
+\newcommand{\bn}{{\mathbb N}}
+\newcommand{\bz}{{\mathbb Z}}
+
+\newcommand{\expe}{{\mathsf E}}
+\newcommand{\pr}{{\mathsf{Pr}}}
+
+
+\setlength{\parindent}{0pt}
+%\setlength{\parskip}{2ex}
+\newenvironment{proofof}[1]{\bigskip\noindent{\itshape #1. }}{\hfill$\Box$\medskip}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+\newtheorem*{problem*}{Problem}
+
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{CS477 Combinatorics: Homework 8}
+\author{于峥 518030910437}
+\date{\today}
+
+\maketitle
+
+\begin{problem}
+$\pi$和$\sigma$是两个$[2020]$上的排列，各自的圈结构中恰好有2000个圈。
+确定$\pi \circ \sigma$的圈数的所有可能值。
+\begin{sol}
+  在求所有的可能值之前，我们不妨先确定圈数的上下界。由于我们知道一个对换可以分裂或合并一个环。
+  
+  如果我们想让圈数最小，我们要尽可能去合并环。由于环结构中恰好有2000个圈，我们将$\pi$分解成对换，我们取分解后得到对换数量最少的，那么
+  每个圈可以贡献圈数大小减一个对换。所以我们有20个对换。现在我们希望每个对换作用在$\sigma$上后都能完成一次合并。这显然是可以做到的，
+  例如我们让$\sigma$包含一个大小为$21$的环$(1,2\cdots 21)$,和1999个大小为1的环。那么我们只要简单的让$\pi$为$(22,23)(24,25)\cdots(60, 61)$
+  即可。此时$\pi\circ\sigma$有$1980$个环。
+  
+  同样要让环最大只需要让$\pi$为$(1,2)(2,3)\cdots(20,21)$，也就是$\sigma^{-1}$。此时有$2020$个环。由于我们注意到$\pi$中
+  20个对换每一个都能让圈的数量加一或减一。因此$1980$到$2020$之间的偶数都是可能做到的。
+  
+\end{sol}
+\end{problem}
+
+\begin{problem}
+$[n]$的所有置换中有多少个恰好有1个圈？恰好有2个、3个、$n-2$个、$n-1$个、$n$个？
+
+\begin{sol}
+  令$f_{n,m}$表示$[n]$的所有置换中恰有$m$个圈的数量，我们可以通过枚举$1$所在
+  圈的大小进行递推求解
+  $$
+  f_{n,m}=\sum_{i=1}^{n-m+1}(i-1)!\binom{n-1}{i-1}f_{n-i,m-1}
+  $$
+  当$m=1$时求解的是大小为$n$的轮换数量，所以$f_{n,1}=(n-1)!$。
+  
+  当$m=2$时,
+  \begin{align*}
+    f_{n,2}
+    &=\sum_{i=1}^{n-1}(i-1)!\binom{n-1}{i-1}f_{n-i,1}\\
+    &=(n-1)!\sum_{i=1}^{n-1}\frac 1 {n-i}\\
+    &=H_{n-1}(n-1)!
+  \end{align*}
+
+  当$m=3$时,
+  \begin{align*}
+      f_{n,3}
+      &=\sum_{i=1}^{n-2}(i-1)!\binom{n-1}{i-1}f_{n-i,2}\\
+      &=(n-1)!\sum_{i=1}^{n-2}\frac {H_{n-i-1}} {n-i}\\
+      &=(n-1)!\sum_{i=1}^{n-1}\frac {H_{n-i-1}} {n-i}\\
+      &=(n-1)!\sum_{i=1}^{n-1}\frac {H_{i-1}} {i}\\
+      &=\frac 1 2(n-1)![H_{n-1}^2-H^{(2)}_{n-1}]
+  \end{align*}
+
+  当$m=n$时，全都是大小为$1$的圈$f_{n,n}=1$。
+
+  当$m=n-1$时，有一个大小为$2$的圈，其他都为$1$，所以$f_{n,n-1}=\binom{n}{2}$。
+
+  当$m=n-2$时，可以有一个大小为$3$的圈，其他都为$1$或者由两个大小为$2$的圈，所以
+  \begin{align*}
+    f_{n,n-2}
+    &=2\binom{n}{3}+\frac 1 2 \binom{n}{2}\binom{n-2}{2} \\
+    &=2\binom{n}{3}+3\binom{n}{4} \\
+  \end{align*}
+\end{sol}
+\end{problem}
+
+\begin{problem}
+等概率地随机地在$[n]$的所有置换中取一个。
+
+(a) 1和2在同一个圈中的概率是多少？
+
+(b) 1所在的圈长度为$k$的概率是多少？
+
+(c) 1所在的圈的长度的期望是多少？
+
+(d) 圈的个数的期望是多少？
+
+(e) 每个圈至少包含$[k]$中一个元素的概率是多少？
+\begin{sol}
+
+  (a) 计算1和2在同一个圈中的置换数量, 枚举1所在圈的大小
+  \begin{align*}
+      P
+      =&\frac 1 {n!} \sum_{i=2}^n(i-1)!(n-i)!\binom{n-2}{i-2}\\
+      =&\frac 1 {n(n-1)} \sum_{i=2}^n i-1 \\
+      =& \frac 1 2
+  \end{align*}
+
+  (b) 1所在圈大小为$k$有$(k-1)!\binom{n-1}{k-1}(n-k)!=(n-1)!$种，概率为$\frac 1 n$。
+
+  (c) 由上一问，期望$E=\frac 1 n \sum_{i=1}^n\frac 1 i= \frac {n+1} 2$。
+
+  (d) 沿用第二问的记号, 不难得到
+  $$
+    E_n=\sum_{m=1}^n\frac {mf_{n,m}} {n!} 
+  $$
+  发现$\sum_{m=1}^n mf_{n,m}$代表的意义就是所有置换的每个圈都统计一次贡献，但是我们也可以认为是每个圈中最小的那个元素作了一次贡献。那么
+  $1$在所有置换中都做了一次贡献，即贡献为$n!$。我们记$g_n=\sum_{m=1}^n mf_{n,m}$, 那么除了1以外其他元素所作的贡献我们可以先
+  枚举1所在环大小，那么剩下的元素贡献就成为了一个子问题。因此
+  $$
+  g_n = n! + \sum_{m=1}^n (m-1)!\binom{n-1}{m-1}g_{n-m} = n! + (n-1)!\sum_{m=1}^{n-1}\frac {g_m} {m!}
+  $$
+  对比$E_n$和$g_n$, 可以发现
+  $$
+  E_n = 1 + \frac 1 n \sum_{m=1}^{n-1}E_m
+  $$
+  并且$E_1=1$, 对比调和级数恒等式
+  $$\sum _{{k=1}}^{n}H_{k}=(n+1)H_{n}-n$$
+  可以发现两者相同，我们得到$E_n=H_n$。
+
+  (e) 令$h_{n,k}$代表大小为$n$的置换每个圈包含$[k]$中一个元素的个数。我们首先有$h_{n,0}=0, h_{0,0}=1$。
+  当$n>k>0$时，我们枚举$[k]$中最小元素所在圈的大小和在$[k]$中的元素个数。
+  \begin{align*}
+    h_{n,k}&=\sum_{i=1}^{k}\sum_{j=0}^{n-k}\binom{k-1}{i-1}\binom{n-k}{j}(i+j-1)!h_{n-i-j,k-i}\\
+  \end{align*}
+
+  上面这个式子不会算，我们可以组合解释，认为是先让$[k]$中的元素组成一个置换，然后放入其他元素，放入
+  第一个元素有$k$种方法，然后是$k+1,k+2,\cdots,n-1$。
+  
+  所以$h_{n,k}=k!\cdot k \cdot (k+1)\cdots(n-1)=k(n-1)!$，因此概率为$k/n$。
+  
+  \paragraph{Tips}:上面的题目可以用这样的性质做，一个置换可以表示成若干个轮换，如果我们把每个轮换
+  的最小元素放在最后，然后按最小元素排列。例如$(11,7,5,9,1)(6,3,2)(4,8,10,3)$我们将括号去掉之后依然
+  能够得到原排列是什么样的。
+\end{sol}
+\end{problem}
+
+\begin{problem} *
+将$\mathbf{Z}_n$（模$n$的同余系$0, 1, \dots, n-1$组成的环）的元素排在一个等分成$n$格的圆周上，每个格子一个元素，使得如果$a+1$顺时针在$b$之前一格，那么$b+1$顺时针在$a$之前一格。对什么样的
+$n$，必定存在$x$使得$x+1$在$x$之前一格？
+
+\paragraph{Claim} 当$n$不是4的倍数时，必定存在$x+1$在$x$前一格。
+
+(a) 当$n=4k$,我们这样进行构造。如果轮换为$a=(a_0, a_1, a_2, \cdots, a_{n-1})$，让
+$a_0=n-1, a_1 = n-4, a_2 = n-3, a_3=n-2$, 其他$a_i = a_{i-4} - 4$。
+
+我们先按下标四个为一组，对组内的关系进行检查，每一组都形如
+$4k-1,4k-4,4k-3,4k-2$。$4k-1$在$4k-4$之前推出$4k-3$在$4k-2$之前，符合要求。
+$4k-4$在$4k-3$之前推出$4k-1$在$4k-5$之前。不难发现$4k-1$后继的确是$4k-5$，
+因为我们有$a_i = a_{i-4} - 4$。这样我们顺便也完成了相邻组的检查，因此该构造满足要求。
+
+(b) 当$n$为奇数时,由于我们当我们想让$a+1$在$b$之前，必然有$b+1$在
+$a$之前， 这意味着我们每次都会为两个不同的元素选择后继，而$n$为奇数，那么
+最后只剩一个元素没有决定后继时一定会出现矛盾，所以必定存在$x$使得$x+1$在$x$之前一格。
+
+(c) 当$n=4k+2$时，假设满足条件的轮换为$\pi$。令$\sigma$为轮换$(0,1,2,\cdots,n-1)$。
+那么$\pi\sigma$将会是$\frac n 2$个不相交的对换。因为如果$(\pi\sigma)(a)=\pi(a+1)=b$,
+那么必有$(\pi\sigma)(b)=\pi(b+1)=a$。进而注意到$\pi = (\pi\sigma)\sigma^{-1}$。
+由于$\sigma^{-1}，\pi$都是一个环，而$\pi\sigma$将会是奇数个的对换，因此等式右边是偶置换，左边是奇置换。
+因此不可能存在满足条件的$\pi$.
+
+\paragraph{PS} 感觉这题也不是很复杂QAQ，最后一种情况想了好久。
+
+
+
+\end{problem}
+
+\end{document}
+
+

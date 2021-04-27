@@ -1,0 +1,153 @@
+\documentclass{ximera}
+
+\usepackage[UTF8]{ctex}
+
+\begin{document}
+\title{Mathematical Logic}
+\author{于峥}
+
+\begin{abstract}
+    homework 4
+\end{abstract}
+\maketitle
+
+\begin{problem}
+    Can you derive the rule of contradiction from the modified contradiction?
+    \begin{solution}
+        $$
+            \begin{aligned}
+                1. &\Gamma ~ &\neg\varphi ~~ &\psi      &\text{(premise)}\\
+                2. &\Gamma ~ &\neg\varphi ~~ &\neg\psi  &\text{(premise)}\\
+                3. &\Gamma ~ &\neg\varphi ~~ &\varphi   &\text{(modified contradiction by 1 and 2)}\\
+                4. &\Gamma ~ &\varphi     ~~ &\varphi   &\text{(assumption)}\\
+                5. &       ~ &\Gamma      ~~ &\varphi   &\text{(modified contradiction by 3 and 4)}
+            \end{aligned}
+        $$
+    \end{solution}
+\end{problem}
+
+\begin{problem} Prove:
+    (a) \begin{tabular}{ll}
+        $\Gamma$ & $\varphi$\\
+        \hline
+        $\Gamma$ & $\neg\neg\varphi$\\
+        \end{tabular}
+    (b) \begin{tabular}{ll}
+        $\Gamma$ & $\neg\neg\varphi$\\
+        \hline
+        $\Gamma$ & $\varphi$\\
+        \end{tabular}
+    \begin{solution} 
+        (a) 
+        $$
+            \begin{aligned}
+                1. &\Gamma &                ~~&\varphi         &\text{(premise)}\\
+                2. &\Gamma &\neg\varphi     ~~&\varphi         &\text{(assumption)}\\
+                3. &\Gamma &\neg\varphi     ~~&\neg\varphi     &\text{(assumption)}\\
+                4. &\Gamma &\neg\varphi     ~~&\neg\neg\varphi &\text{(modified contradiction by 2 and 3)}\\
+                5. &\Gamma &\neg\neg\varphi ~~&\neg\neg\varphi &\text{(assumption)}\\
+                6. &\Gamma &                ~~&\neg\neg\varphi &\text{(case analysis by 4 and 5)}
+            \end{aligned}
+        $$
+        (b)
+        $$
+            \begin{aligned}
+                1. &\Gamma &            ~~&\neg\neg\varphi         &\text{(premise)}\\
+                2. &\Gamma &\neg\varphi ~~&\neg\neg\varphi         &\text{(assumption)}\\
+                3. &\Gamma &\neg\varphi ~~&\neg\varphi             &\text{(assumption)}\\
+                4. &\Gamma &\neg\varphi ~~&\varphi                 &\text{(modified contradiction by 2 and 3)}\\
+                5. &\Gamma &\varphi     ~~&\varphi                 &\text{(assumption)}\\
+                6. &\Gamma &            ~~&\varphi                 &\text{(case analysis by 4 and 5)}                 
+            \end{aligned}
+        $$
+
+    \end{solution}
+\end{problem}
+
+\begin{problem} Is the following derivable?
+    $$
+    \frac {} {\Gamma ~~ \exists x \varphi ~~ \forall x \varphi}
+    $$
+    \begin{solution}
+        We let 
+        $$\mathfrak{I}=\{\{0^{\mathfrak{I}}, 1^{\mathfrak{I}}\}, R^{\mathfrak{I}}, \beta\}$$ 
+        and $0^{\mathfrak{I}} \in R^{\mathfrak{I}}$,$1^{\mathfrak{I}} \not\in R^{\mathfrak{I}}$.
+        if $\varphi := Rx$.
+
+        Then $\mathfrak{I}\frac 0 {v_0} \frac 1 {v_1} \models \Gamma \land \exists x \varphi$.
+        $\mathfrak{I}\frac 0 {v_0} \frac 1 {v_1} \not\models \forall x \varphi$.
+
+        So $\{\Gamma ~ \exists x \varphi\} \not\models \forall x \varphi$, it is not correct, so it is not derivable.
+    \end{solution}
+\end{problem}
+
+\begin{problem}
+    Let $S = \{R\}$ with unary relation symbol $R$. 
+    $$
+        \Phi = \{\exists x Rx \} \cup \{ \neg Ry | \text{for every variable y} \}
+    $$
+    
+    Prove that:
+
+        – $\Phi$ is consistent.
+
+        – There is no term $t \in T^S$, with $\Phi \vdash Rt$.
+    \begin{solution}
+        (1)
+        We construct 
+        $$\mathfrak{I} = \{ \{ 0^{\mathfrak{I}}, 1^{\mathfrak{I}} \}, R^{\mathfrak{I}}, \beta \}$$
+
+        where $\beta(v_i)=1^{\mathfrak{I}}$, and $0^{\mathfrak{I}} \in R^{\mathfrak{I}}$, $1^{\mathfrak{I}} \not\in R^{\mathfrak{I}}$。
+
+        (i) because $0^{\mathfrak{I}} \in R^{\mathfrak{I}}$， so $\exists x Rx$ is satisfiable.
+
+        (ii) and $\beta(v_i)=1 \not\in R^{\mathfrak{I}}$, so $\{ \neg Ry | \text{for every variable y} \}$ is satisfiable.
+
+        $\Phi$ is satisfiable $\Rightarrow \Phi$ is consistent (\textbf{Lemma 2.5}).
+
+        (2)  We construct 
+        $$\mathfrak{I} = \{ \{ 1^{\mathfrak{I}} \}, R^{\mathfrak{I}}, \beta \}$$
+
+        Where $\beta(v_i)=1^{\mathfrak{I}}$, and $1^{\mathfrak{I}} \not\in R^{\mathfrak{I}}$.
+        Because $\{1\}$ is universe.
+
+        So no term $t \in T^{S}$, with $\Phi \vdash Rt$. It is satisfiable.
+
+    \end{solution}
+\end{problem}
+
+\begin{problem}
+    Let $S = \{R\}$ with unary relation symbol $R$. and
+    $$
+        \Phi = \{Rx \lor Ry\}
+    $$
+    
+    Prove that:
+
+        – $\Phi$ is consistent.
+
+        – $\Phi \not\vdash Rx$, $\Phi \not\vdash Ry$.
+
+        - $\mathfrak{I}^{\Phi} \not\models \Phi$
+    \begin{solution}
+        (1) Because $\Phi \not\vdash Rx \land Ry$, so $\Phi$ is not inconsistent. 
+
+        (2) Construct 
+        $$
+            \mathfrak{I} = \{\{0^{\mathfrak{I}},1^{\mathfrak{I}}\}, R^{\mathfrak{I}}, \beta\}\}
+        $$
+        and  $0^{\mathfrak{I}} \in R^{\mathfrak{I}}$, $1^{\mathfrak{I}} \not\in R^{\mathfrak{I}}$.
+
+        Then $\mathfrak{I}\frac 0 x \frac 1 y \models \Phi$, and $\mathfrak{I}\frac 0 x \frac 1 y \not\models Ry$.
+
+        $\Phi \not\models Ry \Rightarrow \Phi \vdash Ry \textbf{ is not correct}$, so $\Phi \not\vdash Ry$.
+
+        same as $\Phi \not\vdash Rx$.
+
+        (3) Because $\Phi \not\vdash Rx$, so does not exist $\overline{t} \in R^{\mathfrak{I}^{\Phi}}$.
+        then $\mathfrak{I}^{\Phi} \not\models Rx$ and 
+        $\mathfrak{I}^{\Phi} \not\models Ry \Rightarrow \mathfrak{I}^{\Phi} \not\models Rx \lor Ry$
+        
+    \end{solution}
+\end{problem}
+\end{document}

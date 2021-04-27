@@ -1,0 +1,59 @@
+\documentclass{ximera}
+
+\usepackage[UTF8]{ctex}
+
+\begin{document}
+\title{Mathematical Logic}
+\author{于峥}
+
+\begin{abstract}
+    homework 6
+\end{abstract}
+\maketitle
+
+\begin{problem} Let $\Phi \subseteq L^S$ be finite, and let $ϕ \in L^S$ with $\Phi \vdash \varphi$. Note that a proof might use formulas built on any symbol in S.
+    
+    Define $S_0 \in S$ to be the set of symbols that occur in $\Phi$ and $\varphi$. Then there is a proof for $\Phi \vdash \varphi$
+    such that every formula occurs in the proof is an $S_0$-formula.
+    \begin{solution}
+        By theorem 1.2, we have a S-interpretation $\mathfrak{I}^{\Phi}$.
+        $$
+            \mathfrak{I}^{\Phi} \models \varphi \Longleftrightarrow \Phi \vdash \varphi
+        $$
+        
+        same as $S_0$-interpretation $\mathfrak{I}^{\Phi}_0$, let $\mathfrak{I}^{\Phi}_0$ has same interpretation on function and relation with $\mathfrak{I}^{\Phi}$.
+        By Coincidenc lemma
+        $$
+            \mathfrak{I}^{\Phi} \models \varphi \Longrightarrow \mathfrak{I}^{\Phi}_0  \models \varphi \Longrightarrow \Phi \vdash \varphi
+        $$
+    \end{solution}
+\end{problem}
+
+\begin{problem}
+    Assume that for every set $A$ there is a well order $\leqslant \subseteq A \times A$. 
+    Prove Zorn’s Lemma.
+    \begin{solution}
+        % Consider the Axiom of Choice:
+
+        % For every non-emptyset $X$, there is a choice function $f : \mathcal{P} / \{ \emptyset \} \rightarrow X$. 
+        % such that $f(A) \in A$ for each $A$.
+
+        % Because $A$ there is a well order $\leqslant \subseteq A \times A$,  so we let $f(A)$ 
+        % be the minimal element of $A$ for each $A$ in $\mathcal{P}(A) / \{ \emptyset \}$. 
+        
+        First we proof in any partially ordered set $(S, \leqslant)$
+        there is a maximal chain(a chain $C$ for which no $C \cup \{s\}$ is a chain for any s in $S / C$:
+        
+        For one chain $C_0$, if for any s in $S / C_0$ that $C_0 \cup \{s\}$ is not a chain, then $C_0$ is 
+        maximal chain. Otherwise, let $C_1 = C_0 \cup \{s\}$, $C_0 \cup \{s\}$ is a chain. Similarly we can define 
+        $C_2, C_3, \cdots, C_n$. and define $M = \{ C_0, C_1, C_2, \cdots, C_n \}$, 
+        Because $C_0 \subseteq C_1 \subseteq C_2 \cdots \subseteq C_n$, so $M$ is well-ordering.
+        and $M$ is transfinite induction object by transfinite induction.
+        
+        So $C_n$ is the upperbound of $M$ and the maximal chain of $S$, and $C_n$ is also well-ordering.
+        Let $a$ is the upperbound of $C_n$, if $\exists b, a \leq b$, then $C_n \cup \{ b \} \subseteq C_n$.
+        hence $a = b$. So $a$ is the maximal element of $S$.
+    \end{solution}
+\end{problem}
+
+\end{document}

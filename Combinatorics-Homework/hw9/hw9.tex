@@ -1,0 +1,236 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{CJK}
+\usepackage{float}
+\usepackage{mdframed}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+\providecommand{\ud}[1]{\underline{#1}}
+
+\newmdtheoremenv{thm}{Theorem}
+\newmdtheoremenv{lemma}[thm]{Lemma}
+\newmdtheoremenv{fact}[thm]{Fact}
+\newmdtheoremenv{cor}[thm]{Corollary}
+\newtheorem{eg}{Example}
+\newtheorem{ex}{Exercise}
+\newmdtheoremenv{defi}{Definition}
+\newenvironment{sol}
+  {\par\vspace{3mm}\noindent{\it Solution}.}
+  {\qed \\ \medskip}
+
+\newcommand{\ov}{\overline}
+\newcommand{\ca}{{\cal A}}
+\newcommand{\cb}{{\cal B}}
+\newcommand{\cc}{{\cal C}}
+\newcommand{\cd}{{\cal D}}
+\newcommand{\ce}{{\cal E}}
+\newcommand{\cf}{{\cal F}}
+\newcommand{\ch}{{\cal H}}
+\newcommand{\cl}{{\cal L}}
+\newcommand{\cm}{{\cal M}}
+\newcommand{\cp}{{\cal P}}
+\newcommand{\cs}{{\cal S}}
+\newcommand{\cz}{{\cal Z}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\la}{\leftarrow}
+\newcommand{\Ra}{\Rightarrow}
+\newcommand{\dist}{\mbox{\rm dist}}
+\newcommand{\bn}{{\mathbb N}}
+\newcommand{\bz}{{\mathbb Z}}
+
+\newcommand{\expe}{{\mathsf E}}
+\newcommand{\pr}{{\mathsf{Pr}}}
+
+
+\setlength{\parindent}{0pt}
+%\setlength{\parskip}{2ex}
+\newenvironment{proofof}[1]{\bigskip\noindent{\itshape #1. }}{\hfill$\Box$\medskip}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+\newtheorem*{problem*}{Problem}
+
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{CS477 Combinatorics: Homework 9}
+\author{于峥 518030910437}
+\date{\today}
+
+\maketitle
+
+\begin{problem}
+{在一个图$G=(V, E)$中，一个{\em 匹配}是一个$E$的子集$M \subseteq E$，使得没有一个点在$M$的两条边上。一个{\em 顶点覆盖}是一个$V$的子集$W \subseteq V$，使得$E$中的每条边都至少有一个端点在$W$中。$\alpha'$为最大的匹配$M$的大小，$\beta$为最小的顶点覆盖的大小。}
+
+(a) 证明：对任意图$G$，$\alpha' \leq \beta$。
+
+(b) 给出例子使得(a)中等号不成立。
+
+(c) 证明：对任意图$G$，$\beta \leq 2 \alpha'$。
+
+(d) 给出例子使得(c)中等号不成立。
+
+(e) 找到所有使得(c)中等号成立的图。
+\begin{sol}
+    (a) 我们证明最大匹配中所涉及到的边是边集的一个子集，并且这些边两两之间之间没有公共点。
+    因此顶点覆盖想要覆盖住这些边将至少需要选择$\alpha'$个顶点。所以$\alpha'$小于等于所有的
+    顶点覆盖，因此$\alpha' \leq \beta$。
+
+    (b) $C_3$, 最大匹配为1，最小点覆盖为2。
+
+    (c) 注意到最大匹配中的边所涉及到的的顶点集合大小为$2\alpha'$, 这个集合必定为一个
+    顶点覆盖，因为如果有边没有被覆盖到，我们将可以把这条边加入匹配。这与$M$是最大匹配矛盾。
+
+    (d) $P_3$, 最大匹配为1，最小点覆盖为1。
+
+    (e) $G = \bigcup_{i=1}^nK_{2a_i+1}$， 或者说若干个点数为奇数的完全图的并。
+    
+    $\Rightarrow$ 我们可以验证发现每个连通块$V'$最大匹配大小为$(|V'|-1)/2$。而
+    最小覆盖必须选择$|V'|-1$个点，否则未被选择两个点之间的边将不会被覆盖。进而整个图
+    都满足等号。
+
+
+    $\Leftarrow$
+    \begin{lemma}
+        对于任意图，$\alpha + \beta = |V|$。
+        
+        \text{proof}. 我们证明对于连通图该性质成立即可。设$S$为一个独立集，考虑
+        补集$V-S$。因为$S$之间没有边连通，所以任意边一定有至少一个端点
+        属于$V-S$。因此$V-S$是一个顶点覆盖。反之，一个顶点覆盖的补集也一定是一个独立集，
+        否则将会有一条边没有被顶点覆盖所覆盖。
+
+        因此当独立集取到最大时，点覆盖最小。
+    \end{lemma}
+
+    \begin{lemma}
+        任意图$G=(V,E)$的最大匹配等于
+        $$
+        \frac 1 2 \min_{U \subseteq V} (|U| - \mathtt{odd}(G - U) + |V|)
+        $$
+        $\mathtt{odd}(H)$指$H$中奇数大小连通块的个数。
+    \end{lemma}
+
+    有以上Lemma, 我们可以知道$\alpha = |V| - \beta = |V| - 2 \alpha'$。
+    
+    并且可以$\exists U \subseteq V$, 使得$G-U$中有$|U|+\alpha$个奇数大小的连通块。
+    如果$U \not= \emptyset$, 我们可以在这$|U|+\alpha$个奇数大小的连通块中每个连通块中取一个
+    点，则得到了一个更大的独立集，与$\alpha$矛盾。
+
+    因此$U = \emptyset$, $G$有$\alpha$个奇数大小的连通块，显然$G$不能再有偶数大小的连通块，
+    并且每个连通块必须是完全图，否则最大独立集将能够被扩大。
+    
+    所以$G$为若干个点数为奇数的完全图的并。
+\end{sol}
+\end{problem}
+
+\begin{problem}
+证明：对二分图$G$，$\beta = \alpha' $。
+\begin{sol}
+    由于$\alpha' \leq \beta$, 因此我们只要能够在二分图上构造一个与最大匹配大小相同的顶点
+    覆盖即可。构造方法如下:
+
+    (1) 从右边未匹配边的顶点出发，按照未匹配边，匹配，未匹配边，匹配边$\cdots$的顺序走出一条路径。
+    并标记途中经过的顶点，则最后一条经过的边必定为匹配边。重复上述过程，直到右边不再含有未匹配边的无标记点。
+
+    (2) 我们将左边被标记的点和右边未被标记的点加入顶点覆盖。
+
+    首先我们这样构造的顶点覆盖大小一定是$\alpha'$, 因为左边被标记的点一定是匹配边的顶点，
+    因为我们是从右边经过未匹配边走到左边，如果我们不能找到一条匹配边走到右边，这意味着找到
+    了一条增广路，这与最大匹配相矛盾。同时右边未被标记的点也对应一条匹配边，否则我们的算法
+    会将它作为起点标记。并且匹配边不可能左端点是标记了，同时右端点是没标记，因为
+    右端点在(1)中在经过这条边后被标记。
+
+    如果有一条边不能被我们所找到的顶点集合覆盖，那么一定有左端点有标记，同时右端点是没标记，
+    而这是不可能的。所以这是一个顶点覆盖。大小为$\alpha'$。
+
+\end{sol}
+\end{problem}
+
+\begin{problem}
+一个$n \times n$ 的0-1矩阵中，任意$n$个0中至少有两个是同行或者有两个是同列的，证明：可以在矩阵中找出$a$行和$b$列，使得这些行和列的交点上都是1，并且$a+b \geq n+1$。
+\begin{sol}
+    设矩阵为$a_{ij}$, $G=([2n],\{\{i, j\} : i < n, j \geq n, a_{i,j-n}=0\})$。
+    
+    那么根据题目，我们知道二分图$G$没有完美匹配。根据Hall定理， $\exists S \in [n], S \not= \emptyset, S \not= [n]$
+    , .s.t $|\mathcal{N}(S)| < |S|$。令二分图右侧点集为$R$, 那么$R - \mathcal{N}(S)$与
+    $S$之间没有边。对应到矩阵上也就是这些点对应的行和列的交点上都是1。
+    而$|S| + |R-\mathcal{N}(S)| \geq n + 1$.
+
+
+\end{sol}
+\end{problem}
+
+\begin{problem}
+We are given two square sheets of paper of area 22. Each sheet is divided into 22 polygons of area 1 (the divisions may be different). One sheet is placed on top of the other. Show that we can place 22 pins such that each of the 44 polygons is pierced.
+\begin{sol}
+    我们将两个$\mathtt{paper}$上的区域分别看作二分图的$L,R$, 如果两个区域相交那么认为图上
+    对应点有边相连。那么对于图上任意$S \in L$, 必有$|\mathcal{N}(S)| \geq |S|$。
+    否则$S$对应区域的面积将小于$\mathcal{N}(S)$对应区域的面积，这是不可能的。因此该二分图
+    满足Hall定理，存在完美匹配。
+
+\end{sol}
+\end{problem}
+
+\begin{problem}
+一个二分图$G = (A, B, E)$中$|A| = n \geq t$，$|B| = m$，已知：
+
+(i) $G$中有一个大小为$n$的匹配；
+
+(ii) $A$中每个顶点的度数至少为$t$。
+
+求证：$G$中至少有$t!$个大小为$n$的匹配。
+\begin{sol}
+    \paragraph{Induction Base} $t=1$时，结论已经蕴含在条件中。
+
+    \paragraph{Induction Step} 假设小于$t$时结论成立，下面证明对于$t$结论成立。
+    
+    \texttt{Inner Induction Base}: $n=t$, 那么我们任意选一固定点$u \in A$, 选择与$u$相邻的点$v \in B$，有$t$种选择。
+    那么剩下$n-1$个点每个点的度数至少为$n-1$，我们重复上面的过程。就可以选出$t!$种不同的匹配。
+
+    \texttt{Inner Induction Step}:
+    由条件(i),我们知道此二分图满足Hall条件。因此分两种情况讨论。
+
+    a) 如果对所有非空真子集$S \in A$, 满足$|\mathcal{N}(S)| > |S|$。
+
+    那么我们任意选一固定点$u \in A$, 选择与$u$相邻的点$v \in B$。注意到
+    $G'=(A-\{u\}, B-\{v\}, E')$仍然满足Hall条件，因为没有任何非空集合失去了超过
+    一个邻居。并且剩下的点度数至少为$t-1$，根据归纳$G'$有至少$(t-1)!$个匹配。而
+    对于$v$的选择有$t$种方法。所以$G$有$t!$个匹配。
+
+    b) 存在一非空真子集$S \in A$,  满足$|\mathcal{N}(S)| = |S|$。$t \leq |\mathcal{N}(S)| = |S|$, 
+    又$(S, \mathcal{N}(S), E)$满足Hall条件，根据归纳，所以其中有$t!$的匹配。
+\end{sol}
+\end{problem}
+
+\section*{puzzles}
+
+下面两个问题不打分。我们将在下节课进行讲解。
+
+\begin{problem}
+A和B在$m \times n$的棋盘上轮流取点，A先选择任意一个格子，以后的每一步需要取一个和对手上一个格子相邻但没有被任何人取过的格子。无法继续的一方输掉游戏。
+
+对任意的$m$和$n$，求A第一步必胜的取法数。
+\begin{sol}
+    如果第一步放在$(i,j)$(棋盘从1开始编号)，只有当$i,j,n,m$都是奇数先手才能必胜。
+    我们将棋盘黑白染色后，将相邻的点连边，组成一个二分图。如果$nm$为偶数这个二分图是有完美匹配的。因此先手无论走哪里，
+    对手只要走二分图上对应点的完美匹配所匹配的点即可。
+
+    如果$nm$为奇数，如果先手所走的位置$(i,j)$上$ij$为奇数，剩下的图不难构造出完美匹配，因此采取与上面一样的方案。
+    而如果$ij$为偶数，剩下的图黑白点个数不相同，因此肯定没有完美匹配，而对手肯定可以做到
+    不断走最大匹配上所对应的点。
+
+\end{sol}
+\end{problem}
+
+\begin{problem}
+A和B参加一个游戏，A在一付扑克牌中随机抽取5张，看过之后将其中的4张在桌子上从左到右排成一排。B需要猜出第5张牌。有没有策略使得B总是能猜对？
+\end{problem}
+
+\end{document}
+
+

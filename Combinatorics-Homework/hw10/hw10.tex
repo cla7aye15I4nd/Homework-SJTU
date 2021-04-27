@@ -1,0 +1,274 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{CJK}
+\usepackage{float}
+\usepackage{mdframed}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+\providecommand{\ud}[1]{\underline{#1}}
+
+\newmdtheoremenv{thm}{Theorem}
+\newmdtheoremenv{lemma}[thm]{Lemma}
+\newmdtheoremenv{fact}[thm]{Fact}
+\newmdtheoremenv{cor}[thm]{Corollary}
+\newtheorem{eg}{Example}
+\newtheorem{ex}{Exercise}
+\newmdtheoremenv{defi}{Definition}
+\newenvironment{sol}
+  {\par\vspace{3mm}\noindent{\it Solution}.}
+  {\qed \\ \medskip}
+
+\newcommand{\ov}{\overline}
+\newcommand{\ca}{{\cal A}}
+\newcommand{\cb}{{\cal B}}
+\newcommand{\cc}{{\cal C}}
+\newcommand{\cd}{{\cal D}}
+\newcommand{\ce}{{\cal E}}
+\newcommand{\cf}{{\cal F}}
+\newcommand{\ch}{{\cal H}}
+\newcommand{\cl}{{\cal L}}
+\newcommand{\cm}{{\cal M}}
+\newcommand{\cp}{{\cal P}}
+\newcommand{\cs}{{\cal S}}
+\newcommand{\cz}{{\cal Z}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\la}{\leftarrow}
+\newcommand{\Ra}{\Rightarrow}
+\newcommand{\dist}{\mbox{\rm dist}}
+\newcommand{\bn}{{\mathbb N}}
+\newcommand{\bz}{{\mathbb Z}}
+
+\newcommand{\expe}{{\mathsf E}}
+\newcommand{\pr}{{\mathsf{Pr}}}
+
+
+\setlength{\parindent}{0pt}
+%\setlength{\parskip}{2ex}
+\newenvironment{proofof}[1]{\bigskip\noindent{\itshape #1. }}{\hfill$\Box$\medskip}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+\newtheorem*{problem*}{Problem}
+
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{CS477 Combinatorics: Homework 10}
+\author{于峥 518030910437}
+\date{\today}
+
+\maketitle
+
+\begin{problem}
+证明：任何一个元素为非负实数、每行每列之和为1的$n \times n$矩阵可以表示成置换矩阵的凸组合。
+\begin{sol}
+  首先我们不难把矩阵转化为二分图，如果$M_{ij}\not=0$, 那么二分图$i,j$对应的点之间有边相连。
+  我们首先证明这个二分图$G=(L\cup R, E)$是有完美匹配的，即该二分图满足Hall条件。
+
+  如果存在子集$S\subset L$, 满足$|\mathcal{N}(S)|<|S|$， 注意到$|S|$所对应
+的行上的数字和为$|S|$。这是$|\mathcal{N}(S)|$对应列上的数字的部分和，而$|\mathcal{N}(S)|$对应列
+上的数字和为$|\mathcal{N}(S)| < |S|$, 产生矛盾，因此必定所有集合都满足Hall条件，即二分图
+有完美匹配。
+因此矩阵上至少有$n$个非零的$M_{ij}$,我们可以对矩阵中不为0的$M_{ij}$个数进行归纳。
+
+\paragraph{Induction Base} 如果有$n$个位置非零，这$n$个位置必定都为1，不难发现
+$M$本身就是个置换矩阵。
+
+\paragraph{Induction Step} 对于非零位置数大于$n$的矩阵，我们找到对应二分图上的一个完美匹配，
+选择将匹配边对应的矩阵中的数中最小的一个，设为$\lambda_0$, 匹配对应的矩阵为$P_0$, 
+那么我们将矩阵减去$\lambda_0P_0$非零位置位置个数必定至少减少$1$，因此我们将剩下的矩阵
+可以看作$(1-\lambda_0)M'$, $M'$依然是每行每列都为1的矩阵，根据归纳$M'$可以表示成
+置换矩阵的凸组合。
+
+那么考虑此时矩阵$M=\lambda_0P_0+(1-\lambda_0)M'=\lambda_0P_0+(1-\lambda_0)\sum_{i=1}^k\lambda_kP_k$。
+并且$\lambda_0+(1-\lambda_0)\sum_{i=1}^k\lambda_k=1$,因此$M$可以表示成置换矩阵的凸组合。
+
+
+\end{sol}
+\end{problem}
+
+\begin{problem}
+$G$是一个二分图，最大度数为$\Delta$。
+
+证明：可以对$G$的边用$\Delta$种颜色染色，使得任何两条有公共点的边不同色。
+
+\begin{sol}
+  假设我们至少需要$C$种颜色才能使得任何两条有公共点的边不同色。那么我们显然
+  有$C \geq \Delta$。
+
+  考虑二分图左侧$L$所有度数为$\Delta$的点的集合$S$, 那么$S$和$\mathcal{N}(S)$必然存在
+  大小为$|S|$的匹配，因为考虑任意子集$T \subset S$, $T$和$\mathcal{N}(T)$之间的边数
+  为$|T|\Delta = |\mathcal{N}(T)|\overline{d}$. $\overline{d}$ 是$\mathcal{N}(T)$
+  的平均度数显然小于等于$\Delta$, 所以$|T| \leq |\mathcal{N}(T)|$，这意味着这个子图满足Hall
+  条件。我们记这个匹配为$M_L$. 同理对右侧拥有度数$\Delta$的点的集合找到完备匹配$M_R$.
+
+  那么 $M_L \cup M_R$形成一个子图，首先我们有这个子图中的点度数都小于等于2。所以这个子图的每个连通块
+  只能是链或者环。  
+
+  i) 如果是环，我们可以做到选泽环上一半的边, 这些边之间没有公共点，我们把它们从图上删去。
+  此时这个连通块中的每个点度数都减少了$1$。
+
+  ii) 如果是链，若这条链的长度为奇数$2k+1$，那么我们可以做到删去$k+1$条互相没有公共点的边使得每个点度数都减少$1$。
+  
+  若是偶数，不难发现不可能链条两端的点度数在原图都是当前图的最大度数$\Delta$, 否则会出现两个度数为$\Delta$的点匹配
+  到了同一个点，根据构造这是不可能的。所以如果我们发现链的一端的度数小于$\Delta$, 那我们就从另一端
+  开始，每隔一条边就删去一条边。我们可以做每个度数为$\Delta$的点度数都减少$1$。
+
+  每次操作可以让最大度数减少1，因此$\Delta$次后图将没有边。我们让一次删去的边染上同一种
+  颜色，我们就得到了一个大小为$\Delta$ 的染色。
+\end{sol}
+\end{problem}
+
+\begin{problem}
+证明：对任意整数$k \geq 2$，
+\[
+r(3, k) \leq \frac{k^2+3}{2}.
+\]
+\begin{sol}
+  \paragraph{Induction Base} 由于$r(3,2)=3,r(3,3)=6$可以验证是满足要求的。
+  \paragraph{Induction Step} 假设对于小于$k$时都成立，下面证明对于$k$也成立。
+
+  我们可以证明，$r(3,k)\leq r(3,k-1)+k$, 因为我们可以选择一个点，对于它连出去的
+  $r(3,k-1)+k-1$条边，如果黄色边数量大于等于$k$, 那么对于黄色边对应的点，如果不全是
+  蓝色(存在蓝色$K_k$)那么必有黄色三角形。如果黄色边数量小于$k$,那么就至少存在$r(3,k-1)$
+  条蓝色边，我们知道这些边对应的点如果存在蓝色$K_{k-1}$, 那么加上选择的点构成蓝色$K_k$。
+
+  当$k$是奇数时
+  $$
+  r(3,k)\leq k + \lfloor\frac {(k-1)^2+3}2\rfloor =
+  k+\frac{(k-1)^2+2}2=\frac{k^2+3}{2}
+  $$
+
+  当$k$是偶数时，我们可以证明$\frac {k^2+2} {2}$个点将足够。因为如果每个点连出去
+  的蓝边数量都小于$\frac {(k-1)^2+3} 2$,并且黄边数量小于$k$。
+
+  那么每个点连出去的黄边数量必须为$k-1$,而$k-1$是奇数，而$\frac {k^2+2}2$也是奇数，
+  因此这个黄色子图不满足握手定律。因此必然存在一个点满足蓝边大于等于$r(3,k-1)$或黄边
+  大于等于$k$。因此$k$为偶数时也满足。
+  
+\end{sol}
+\end{problem}
+
+\begin{problem}
+定义$r_k(3)$为最小的$N$使得对$K_N$的边任意$k$染色，总有一个同色三角形。证明：
+\[
+2^k < r_k(3) \leq \lfloor e k! \rfloor + 1.
+\]
+
+\begin{sol}
+  a) $2^k < r_k(3)$
+
+  \texttt{Induction Base} 当$k=1$时，显然2个点不可能有同色三角形。
+
+  \texttt{Induction Step} 当小于$k$都成立时, 我们取两个大小为$2^{k-1}$的图且
+  两个图没有同色三角形，根据归纳这能做到。我们用新的第$k$种颜色把两个图之间的边连起来，
+  就得到了大小为$2^k$且没有同色三角形的图。
+
+  b) $r_k(3) \leq \lfloor e k! \rfloor + 1$
+
+  用$k$种颜色对$K_n$染色，考虑$K_n$中某个点，它的邻边中必然有某种颜色出现了$\lceil \frac {n-1} k \rceil$次，
+  不妨设为黄色，如果这对应的$\lceil \frac {n-1} k \rceil$个点的子图中出现了黄色，那么意味着出现了
+  一个黄色三角形。否则如果$\lceil \frac {n-1} k \rceil \geq r_{k-1}(3)$,那么也有同色三角形。
+
+  因此我们得到
+  $$
+  r_k(3) \leq k(r_{k-1}(3)-1) + 2
+  $$
+  又$r_2(3)=3$, 我们让$f_1=3, f_k=kf_{k-1}-k+2$. 那么我们可归纳证明
+  $$
+  f_k - 1 = \sum_{i=0}^k\frac{k!}{i!}
+  $$
+  当$k=1$时验证成立。若当小于$k$时成立，那么我们有$k$时也成立
+  $$
+  f_k-1=k(f_{k-1} - 1) + 1 = k \sum_{i=0}^{k-1}\frac {(k-1)!} {i!} + \frac {k!}{k!}=\sum_{i=0}^k\frac{k!}{i!}
+  $$
+  因此$r_k(3) \leq f_k < ek! + 1$, 考虑$r_k(3)$为整数所以 $r_k(3) \leq \lfloor e k! \rfloor + 1$.
+
+
+\end{sol}
+\end{problem}
+
+\begin{problem}
+称一个关于$x_1, x_2, \dots, x_n$的方程$E$是Ramsey的，如果：对任意的$k$，存在一个$N$，使得
+对任意的染色$f: [N] \to [k]$，总有$E$的同色解，即$E$的一组解$(a_1, a_2, \dots, a_n)$使得
+$f(a_1) = f(a_2) = \dots = f(a_n)$。注意其中$a_i$不必两两不同。
+对下面的方程的每一个，证明或否定它是Ramsey的。
+
+(a) $E_1 : x = 2y$；
+
+(b) $E_2 : x + y = z$；
+
+(c) $E_3 : 5x + 3y = 7z + 12w$；
+
+(d) $E_4 : x + 2020y = z$。
+
+\begin{sol}
+  (a) $E_1$ 不是Ramsey的，因为图$G=([N], \{\{x,y\}:x=2y\})$由若干条链组成，可以二染色，
+  所以对于任意的$N$都能做到不出现相邻同色节点，因此没有同色解。
+
+  (b) $E_2$是Ramsey的，$\forall k$, 考虑
+  $$
+  N = r_k(3) = \underbrace{r(3,3,\cdots,3)}_{\texttt{k个3}}
+  $$
+  对于染色$f:[N]\rightarrow[k]$， 我们考虑$K_N$, 对边进行$k$染色，染色方式是对于
+  边$\{u,v\}$, 颜色为$f(|u-v|)$。那么由于其中必定存在同色三角形。设三角形的三个
+  点为$a,b,c(a>b>c)$, 那么边所对应的数为$a-b,b-c,a-c$。由构造知道这三个数是同色的。
+  又$(a-b)+(b-c)=a-c$，所以满足$E_2$。
+
+  (c) 否定，对于$k=22$, 我们定义染色$f : \mathbb{Z}_+ \rightarrow [22]$, 
+  $f(23^k\cdot j)=j \mod 23$，其中$23 \not| j$。
+  假设存在一组同色解$f(x)=f(y)=f(z)=f(w)=j$.
+
+  所以我们有
+  $$
+  5 \cdot 23^{k_1}(23x_1 + j) + 3 \cdot 23^{k_2}(23y_1 + j) = 
+  7 \cdot 23^{k_3}(23z_1 + j) + 12 \cdot 23^{k_4}(23w_1 + j)
+  $$
+
+  我们将等式两边除以$23^{\max\{k_1,k_2,k_3,k_4\}}$
+
+  $$
+  5 \cdot 23^{m_1}(23x_1 + j) + 3 \cdot 23^{m_2}(23y_1 + j) = 
+  7 \cdot 23^{m_3}(23z_1 + j) + 12 \cdot 23^{m_4}(23w_1 + j)
+  $$
+
+  然后对等式两边对$23$取模, 注意到根据定义，$j \not= 0$， 然后除以$j$
+  $$
+  5 \cdot 23^{m_1} + 3 \cdot 23^{m_2} = 
+  7 \cdot 23^{m_3} + 12 \cdot 23^{m_4} \pmod {23}
+  $$
+
+  由于$m_1,m_2,m_3,m_4$中至少有一个是$0$, 而枚举所有情况检查后发现不存在合法的
+  $m_1,m_2,m_3,m_4$， 所以不存在同色解。
+  
+  (d) $E_4$是Ramsey的，借助范德蒙数的存在性来证明，
+  \begin{lemma}
+    对任意的$k, l$, 存在$N$, 使得$[N]$被$k$染色后中一定存在同色的长度为$l$的等差数列。
+    最小的$N$记为$W(k,l)$。
+  \end{lemma}
+  注意到对于$w(k,2021)$，如果我们能保证等差数列的公差也和等差数列同色。那么我们就找到了方程
+  $x+2020y=z$的一组解。我们记满足这样要求的最小的$N$为$f(k)$。
+
+  我们归纳证明$f(k)$是存在的，首先$f(1)=2021$。
+
+  然后我们可以证明
+  $$
+  f(k) \leq W(k, 2020f(k-1) + 1)
+  $$
+
+  因为对$[W(k, 2020f(k-1) + 1)]$进行$k$染色后， 其中存在一个长度为$2020f(k-1) + 1$
+  的同色等差数列$a,a+d, \cdots, a + 2020f(k-1)d$。不妨设颜色为黄色，那么我们再考虑
+  $d, 2d, \dots, f(k-1)d$, 如果这些数中存在黄色，设为$jd$,那么
+  $a, a+jd, \cdots, a + 2020jd$就是满足要求的。否则$d, 2d, \dots, f(k-1)d$
+  是被$k-1$染色的，根据归纳同样满足要求。
+
+  所以对于任意的$k$, 都存在满足条件的$N$。
+\end{sol}
+\end{problem}
+
+\end{document}

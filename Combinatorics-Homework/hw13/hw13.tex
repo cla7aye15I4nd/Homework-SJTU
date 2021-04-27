@@ -1,0 +1,138 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{CJK}
+\usepackage{float}
+\usepackage{mdframed}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+\providecommand{\ud}[1]{\underline{#1}}
+
+\newmdtheoremenv{thm}{Theorem}
+\newmdtheoremenv{lemma}[thm]{Lemma}
+\newmdtheoremenv{fact}[thm]{Fact}
+\newmdtheoremenv{cor}[thm]{Corollary}
+\newtheorem{eg}{Example}
+\newtheorem{ex}{Exercise}
+\newmdtheoremenv{defi}{Definition}
+\newenvironment{sol}
+  {\par\vspace{3mm}\noindent{\it Solution}.}
+  {\qed \\ \medskip}
+
+\newcommand{\expe}{{\mathsf E}}
+\newcommand{\pr}{{\mathsf{Pr}}}
+
+
+\setlength{\parindent}{0pt}
+%\setlength{\parskip}{2ex}
+\newenvironment{proofof}[1]{\bigskip\noindent{\itshape #1. }}{\hfill$\Box$\medskip}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+\newtheorem*{problem*}{Problem}
+
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{CS477 Combinatorics: Homework 13}
+
+\author{于峥 518030910437}
+\date{\today}
+
+\maketitle
+
+\begin{problem}
+Read the proof of Theorem 11.13 in the notes and do the following questions.
+
+(a) Let $\mathcal{H}$ be the Fano plane on $[7]$, describe the hyperedges of $\mathcal{H}$ as $e_1, e_2, \dots, e_7$.
+
+(b) Pick an outcome $((R, B, R, B, R, B, R), (Y, Y, Y, N, N, N, Y), \sigma)$, where $\sigma$ is the identity permutation. Find 
+two edges $e_i$ and $e_j$ such that $B_{i,j}$ happens.
+
+(c) Let
+\[
+A = \{a_1, a_2, \dots, a_{r-1}, b_1, b_2, \dots, b_{r-1}, v \}.
+\]
+Consider a random permutation $\sigma$ on $A$, let $i(\sigma)$ be the number of $i$'s such that $a_i$ is before $v$,
+$j(\sigma)$ be the number of $i$'s such that $b_i$ is before $v$. Prove that
+\[
+\expe_\sigma [(1+p)^i (1-p)^j] \leq 1.
+\]
+
+\begin{sol}
+  (a)
+  \begin{align*}
+      e_1 = \{ 1, 2, 3 \} \\
+      e_2 = \{ 1, 6, 7 \} \\
+      e_3 = \{ 1, 4, 5 \} \\
+      e_4 = \{ 2, 4, 6 \} \\
+      e_5 = \{ 2, 5, 7 \} \\
+      e_6 = \{ 3, 4, 7 \} \\
+      e_7 = \{ 3, 5, 6 \} \\
+  \end{align*}
+
+  (b) $i = 1, j = 4$
+
+  (c) 
+  \begin{align*}
+  &\expe_\sigma((1+p)^i(1-p)^j) \\
+  =&\sum_{i=0}^{r-1}\sum_{j=0}^{r-1} \Pr(i, j) (1-p)^i(1+p)^j \\
+  =&\sum_{k=0}^{2r-2} \sum_{i+j=k} \Pr(i,j)(1-p)^i(1+p)^j
+  \end{align*}
+  其中$\Pr(i, j) = \binom{r-1}{i}\binom{r-1}{j} \frac {(i+j)!(2r-2-i-j)!}{(2r-1)!}$, 也可以写成
+  $$
+  \Pr(i, j) = \frac 1 {2r-1}\binom{r-1}{i}\binom{r-1}{j} \Big{/} \binom{2r-2}{i+j}
+  $$
+  
+  下面我们证明， 当$i+j=k$为一定值的时候，有
+
+  $$
+  \sum_{i+j=k} \Pr(i,j)(1-p)^i(1+p)^j \leq \frac {1} {2r-1}
+  $$
+  即
+  $$
+  \sum_{i+j=k} \binom{r-1}{i}\binom{r-1}{j}(1-p)^i(1+p)^j \leq \binom{2r-2}{k}
+  $$
+  可以发现左边为多项式
+  $$
+  (1+(1-p)x)^{r-1}(1+(1+p)x)^{r-1}=(1+2x+(1-p^2)x^2)^{r-1}
+  $$
+  中$x^k$的系数, 据此我们可以得到系数的另一种表示
+  $$
+  \sum_{a + 2b = k, a + b < r} {r - 1 \choose a, b, r-1-a-b}2^a (1-p^2)^b
+  $$
+  不难发现每一项都是在$[0,1]$上单调递减的，因此我们验证$p=0$的时候发现是满足的。由于
+  $k$只有$2r-1$种取值，所以$\expe_\sigma((1+p)^i(1-p)^j) \leq 1$
+
+\end{sol}
+\end{problem}
+
+\begin{problem}
+Let $G$ be a graph on $n$ vertices, and there are no two cycles in $G$ with the same length.
+Prove that the number of edges in $G$ is at most $n + O(\sqrt{n})$.
+\begin{sol}
+  考虑一个符合要求的图$G$, 我们将图上的每条边以$\frac 1 {\sqrt{n}}$的概率删掉，那么考虑
+  图上剩下的圈的个数期望
+  $$
+  E(X)\leq \sum_{i=3}^n(1-\frac 1 {\sqrt{n}})^i = \sqrt{n}(1-\frac 1 {\sqrt{n}})^3(1-(1-\frac 1 {\sqrt{n}})^n)
+  $$
+  所以$E(X) \in O(\sqrt{n})$
+
+  再考虑图上删去的边数$E(Y)=\frac m {\sqrt{n}}$, 由于剩下的边减去圈数后最多只有$n-1$条边，所以
+  $m \leq n - 1 + E(X + Y)$, 可以发现$m \in n + O(\sqrt{n})$.
+\end{sol}
+\end{problem}
+
+\begin{problem}
+Let $P$ be a set of 10 points in the two dimensional plane. Prove that there exists 10 unit circles so that their interiors are disjoint and together they cover all the points in $P$.
+\begin{sol}
+  考虑对平面进行随机六边形密铺，六边形的大小为正好可以装入一个单位圆的大小，那么圆和六边形的面积比
+  为$\frac {\pi} {2\sqrt{3}} > 0.9$。因此这样所有的圆期望可以覆盖到的点数大于$9$, 因此一定存在一种方案可以覆盖
+  10个点。而一个点最多被一个圆覆盖，所以存在这样的十个圆。
+\end{sol}
+\end{problem}
+
+\end{document}

@@ -1,0 +1,119 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{CJK}
+\usepackage{float}
+\usepackage{mdframed}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+\providecommand{\ud}[1]{\underline{#1}}
+
+\newmdtheoremenv{thm}{Theorem}
+\newmdtheoremenv{lemma}[thm]{Lemma}
+\newmdtheoremenv{fact}[thm]{Fact}
+\newmdtheoremenv{cor}[thm]{Corollary}
+\newtheorem{eg}{Example}
+\newtheorem{ex}{Exercise}
+\newmdtheoremenv{defi}{Definition}
+\newenvironment{sol}
+  {\par\vspace{3mm}\noindent{\it Solution}.}
+  {\qed \\ \medskip}
+
+\newcommand{\expe}{{\mathsf E}}
+\newcommand{\pr}{{\mathsf{Pr}}}
+
+
+\setlength{\parindent}{0pt}
+%\setlength{\parskip}{2ex}
+\newenvironment{proofof}[1]{\bigskip\noindent{\itshape #1. }}{\hfill$\Box$\medskip}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+\newtheorem*{problem*}{Problem}
+
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{CS477 Combinatorics: Homework 11}
+\date{May. 13, 2020}
+
+\maketitle
+
+\begin{problem}
+证明：对任意的$k$，都存在一个$N$，使得对平面上任何$N$个没有三点共线的点，
+都能找到$k$个构成一个凸$k$边形。
+\end{problem}
+
+\begin{problem}
+证明：
+\[
+r(k, 4) \in \Omega(k^{1.49258367}).
+\]
+\begin{sol}
+  考虑对$K_n$随机染色，以$p$的概率染上黄色，$q=1-p$的概率染上蓝色，那么假设
+  黄色$K_k$的数量为$X$, 存在蓝色$K_4$的数量为$Y$。
+  那么
+  $$
+  E(X) = \binom{n}{k}p^{\binom{k}{2}} ~~~
+  E(Y) = \binom{n}{4}q^{\binom{4}{2}} 
+  $$
+  我们让$q = 4n^{-\frac 2 3}$, 那么
+  \begin{align*}
+    E(Y) \leq \frac {n^4} {24} q^{6} \leq \frac 1 2
+  \end{align*}
+  同时
+  \begin{align*}
+    E(X) 
+    &\leq \frac {n^k} {k!} (1-4n^{-\frac 2 3})^{\frac{k(k-1)} {2}} \\
+    &\leq \frac {n^k} {k!} e^{-n^{\frac 2 3}k^2}
+  \end{align*}
+\end{sol}
+\end{problem}
+
+\begin{problem}
+证明：对任意的$k,l$，都存在图$G$使得$\chi(G) > k, g(G) > l$。
+\begin{sol}
+  由于一个图的色数为$k$意味着将它分为了$k$个不相交的独立集，因此不难得到
+  $$
+  \alpha (G) < \frac {|G|} k \Rightarrow \chi(G) > k
+  $$
+  假设图$G$上每条边以$p$的概率出现，我们记事件$\{ \alpha (G) \geq \frac {|G|} k \}$
+  为$X$, 事件$\{ g(X) \leq l \}$为$Y$。那么我们只需使$P(X) + P(Y) < 1$即可。
+
+  首先考虑$P(X)$, 图$G$上每条边以$p$的概率出现，记$r=\frac {n} {k}$, 那么
+  $$
+  P(X) \leq \binom{n}{r}(1-p)^{\binom{r}{2}} \leq 2^ne^{-p\binom {r} {2}}
+  $$
+  我们只要让$p \geq \frac n {\binom{r}{2}} = \frac {2k^2} {n - k}$即可。容易看到只要$n$足够大，
+  我们就能让$P(X)$小于任何正常数。
+
+  再考虑$P(Y)$, 当$n > l$时， $P(Y)$不可能为$1$, 此时无论$P(Y)$为何值，
+  我们都能取足够大的$n$，使得$P(X) + P(Y) < 1$, 因此命题成立。
+\end{sol}
+\end{problem}
+
+\begin{problem}
+证明：对任意图$G=(V, E)$，都存在$V$的两个不相交的子集$A$和$B$，使得$A$和$B$之间的边至少有$|E|/2$条。
+\begin{sol}
+  \paragraph{算法}按某种顺序对点黑白染色，每次染一个点时如果该点和黑点连边
+  比和白点连边多，那么染成白色，否则染成黑色。
+  \paragraph{概率方法} 随机对点二染色后，异色点之间的边期望有$|E|/2$，因
+  此存在这样的划分。
+\end{sol}
+\end{problem}
+
+\begin{problem}
+如果没有孤立点，将上面的$|E|/2$改成$|E|/2 + |V|/6$。
+\begin{sol}
+  
+\end{sol}
+\end{problem}
+
+\begin{problem}
+当$G$是连通图时，将上面的$|E|/2$改成$|E|/2 + |V|/4 - 1$。
+\end{problem}
+
+\end{document}

@@ -1,0 +1,186 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{CJK}
+\usepackage{float}
+\usepackage{mdframed}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+\providecommand{\ud}[1]{\underline{#1}}
+
+\newmdtheoremenv{thm}{Theorem}
+\newmdtheoremenv{lemma}[thm]{Lemma}
+\newmdtheoremenv{fact}[thm]{Fact}
+\newmdtheoremenv{cor}[thm]{Corollary}
+\newtheorem{eg}{Example}
+\newtheorem{ex}{Exercise}
+\newmdtheoremenv{defi}{Definition}
+\newenvironment{sol}
+  {\par\vspace{3mm}\noindent{\it Solution}.}
+  {\qed \\ \medskip}
+
+\newcommand{\expe}{{\mathsf E}}
+\newcommand{\pr}{{\mathsf{Pr}}}
+\newcommand{\cf}{{\mathcal F}}
+
+
+\setlength{\parindent}{0pt}
+%\setlength{\parskip}{2ex}
+\newenvironment{proofof}[1]{\bigskip\noindent{\itshape #1. }}{\hfill$\Box$\medskip}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+\newtheorem*{problem*}{Problem}
+
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{CS477 Combinatorics: Homework 14}
+\author{于峥}
+\date{\today}
+
+\maketitle
+
+Due date: Sunday morning 11:11, Jun. 21, 2020.
+
+\begin{problem}
+存在一个常数$C$，使得平面上任意$n$个点组成的集合$P$满足：当$2 \leq k \leq \sqrt{n}$时，
+平面上至少经过$P$中$k$个点的直线最多有$Cn^2 / k^3$条。
+\begin{sol}
+  考虑只保留那些至少经过了$k$个点的直线，假设有$L$条，那么平面上最多有
+  $\binom{L}{2}$个交点。如果两个点位于同一条保留下的直线上且相邻的话，
+  就连一条边。可见至少有$(k-1)L$条边。根据 Crossing Lemma, 
+  当$(k-1)L \geq 4n $ 时
+  $$
+  \binom{L}{2} \geq \frac {(k-1)^3L^3} {64n^2} 
+  $$
+  所以
+  $$
+  L \leq \frac {32n^2} {(k-1)^3} \leq \frac {256n^2} {k^3}
+  $$
+
+  否则由于$2 \leq k \leq \sqrt{n}$, 
+  $L < \frac {4n} {k-1} \leq \frac {8n} {k} \leq  \frac {256n^2} {k^3}$。
+\end{sol}
+\end{problem}
+
+\begin{problem}
+证明：$[12]$有120个不同的5元子集，使得每两个的交集大小至少为2。
+\begin{sol}
+  考虑所有集合包含$\{ 1, 2\}$的五元集合, 由于$\binom{10}{3} = 120$, 因此满足题目要求。
+\end{sol}
+\end{problem}
+
+\begin{problem}
+证明：$[11]$有31个不同的5元子集，使得每两个的交集大小至少为3。
+\begin{sol}
+  $$
+  \mathcal{F} = \{ F \in \binom{[11]}{5}: |F \cap [5]| \geq 4 \}
+  $$
+  根据抽屉原理，任意两个集合的交集至少为$3$, 并且，
+  $$
+  |\mathcal{F}| = \binom{5}{4} \binom{6}{1} + 1 = 31
+  $$
+\end{sol}
+\end{problem}
+
+\begin{problem}
+$x_1, x_2, \dots, x_n$是$n$个（可重复的）模长至少为1的复数，
+对任意下标集$M \subseteq [n]$，记$\sum_M = \sum_{i \in M} x_i$。
+证明：在这$2^n$个$\sum_M$中，至多可以取出$\dbinom{n}{\lfloor n/2 \rfloor}$个，使得他们两两差的模长都小于1。
+\begin{sol}
+  假设对于$n$个复数$x_1, x_2, \dots, x_n$的所能找到的最优解是$\mathcal{F}$, 考虑
+  $-x_1, x_2, \dots, x_n$的解， 
+  $$
+  \mathcal{F}' = \{ F \triangle \{ 1 \} : F \in \mathcal{F}\}
+  $$
+  不难发现$\mathcal{F}'$是满足题目条件的，所以可以得到把其中某些复数符号取反不会影响最优解。
+  因此我们可以让所有数都位于第一二象限。考虑$A, B \in \mathcal{F}$, 如果$B \subset A$, 
+  那么$A / B$ 中不可能只包含某一个象限的点，因为同一象限的复数相加模长只会增大，不可能小于1。
+
+  不难发现这个模型和第七题相同，所以最多可以取$\dbinom{n}{\lfloor n/2 \rfloor}$个。
+
+\end{sol}
+\end{problem}
+
+\begin{problem}
+如果$\cf$是$[n]$上的一个子集族，并且对任意$A \in \cf$和$A \subseteq B$，有$B \in \cf$，那么$\cf$中集合的平均大小至少为$n/2$。
+\begin{sol}
+  $$
+  \frac 1 {|\cf|} \sum_{F\in \cf}|F|=\sum_{i\in[n]}\Pr_{F \in \cf}[i \in F]
+  $$
+  对于任意一个元素$i$, 如果$\cf$存在一个不包含$i$的集合$F$,那么$F \cup \{i\}$也
+  在$\cf$中，因此$\Pr_{F\in \cf}[i \in F]\geq \frac 1 2$,
+  因此平均大小至少$\frac n 2$.
+\end{sol}
+\end{problem}
+
+\begin{problem}
+$r$，$s$是两个整数，$A_1, A_2, \dots, A_m$是$m$个大小为$r$的集合，$B_1, B_2, \dots, B_m$是$m$个大小为$s$的集合，使得
+对所有的$i \in [m]$，$A_i \cap B_i = \emptyset$；对所有的$i \neq j \in [m]$，$A_i \cap B_j \neq \emptyset$。证明：$m \leq \dbinom{r+s}{r}$。
+\begin{sol}
+  考虑每一对$A_i, B_i \subseteq [n]$, 让
+  $$
+  F_i = \{ \pi : \forall x \in A_i, y \in B_i,  \pi^{-1}(x) <  \pi^{-1}(y) \}
+  $$
+
+  即$A_i$所有元素都在$B_i$的元素前的排列，$|F_i| = \binom{n}{r+s}r!s!(n-r-s)!$。
+
+  且$F_i \cap F_j = \emptyset$, 因为$A_i \cap B_j, A_j \cap B_j$均不为空集，所以
+  $\forall \pi \in F_i$, $\exists x \in A_j, y \in B_j$, $\pi^{-1}(x)>  \pi^{-1}(y)$。
+
+  所以
+  $$
+  \sum |F_i| \leq n! \Rightarrow m \leq \binom{r+s}{r}
+  $$
+\end{sol}
+\end{problem}
+
+\begin{problem}某个学校有$n$个学生，$n_1$个男生和$n_2 = n-n_1$个女生。现在要组成尽可能多的学生俱乐部，唯一的限制是如果俱乐部$A$包含另一个俱乐部$B$的所有人，那么在$A$中但不在$B$中的学生必须有男生也有女生。求俱乐部数的最大值。
+  \begin{sol}
+    最大值为 $\binom{n}{ \lfloor n/2 \rfloor }$
+    希望老师发一下这题的证明。
+
+    % 令$X_1$为男生的集合，$X_2$为女生的集合，$X = X_1 \cup X_2$, 不妨假设$n_2 > n_1$
+    % \begin{equation*}
+    %   t(j) = \left \{ \begin{aligned}
+    %       n_2 &&& j = 0, n_2 \\
+    %       1   &&& 1 \leq j \leq n_2 - 1
+    %   \end{aligned}\right.
+    % \end{equation*}
+
+    % 定义所有$X_2$所有轮换构成的集合为$\mathcal{C}$, $I(C)$表示轮换$C$上所有的区间, 
+    % 假设$\mathcal{F}$是一组合法解。考虑
+    % 我们计算
+    % \begin{align*}
+    %   &\sum_{F\in \mathcal{F}} \sum_{C \in \mathcal{C}, F \in I(C)} t(|F\cap X_2|) \binom{n_2}{|F \cap X_2|} \\
+    %   =&\sum_{F\in \mathcal{F}} t(|F\cap X_2|) \binom{n_2}{|F \cap X_2|}
+    %   \sum_{C \in \mathcal{C}, F \in I(C)} 1 \\
+    %   =&\sum_{F\in \mathcal{F}} t(|F\cap X_2|) \binom{n_2}{|F \cap X_2|}
+    %   \left \{
+    %     \begin{aligned}
+    %       (n_2 - 1)! && F \cap X_2 = \emptyset, X_2 \\
+    %       |F \cap X_2|! (n_2-|F \cap X_2|)! && \text{otherwise}
+    %     \end{aligned}
+    %   \right . \\
+    %   =& |\mathcal{F}|n_2!
+    % \end{align*}
+
+    
+    % 我们可以交换求和次序，令$\omega(i) = t(i)\binom{n_2}{i}$，那么原式可以写成。
+    % $$
+    %   \sum_{C \in \mathcal{C}} \sum_{F\in \mathcal{F}, F \in I(C)}  \omega(|F \cap X_2|) 
+    % $$
+      
+    % 对于轮换$C = (c_1, c_2, \dots, c_{n_2})$，令$\mathcal{L}_i$为所有$c_i$开头的区间，其中不包括整个$C$构成的区间。
+
+    % $$
+    % \sum_{F \cup X_2 \in \mathcal{L}_i} \omega(|F \cap X_2|) = \sum_{i=0}^{n_2}|\mathcal{F}(i)|\omega(i)
+    % $$
+  \end{sol}
+\end{problem}
+
+\end{document}

@@ -1,0 +1,248 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{CJK}
+\usepackage{float}
+\usepackage{mdframed}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+\providecommand{\ud}[1]{\underline{#1}}
+
+\newmdtheoremenv{thm}{Theorem}
+\newmdtheoremenv{lemma}[thm]{Lemma}
+\newmdtheoremenv{fact}[thm]{Fact}
+\newmdtheoremenv{cor}[thm]{Corollary}
+\newtheorem{eg}{Example}
+\newtheorem{ex}{Exercise}
+\newmdtheoremenv{defi}{Definition}
+\newenvironment{sol}
+  {\par\vspace{3mm}\noindent{\it Solution}.}
+  {\qed \\ \medskip}
+
+\newenvironment{pf}
+  {\par\vspace{3mm}\noindent{\it pf}.}
+
+\newcommand{\ov}{\overline}
+\newcommand{\ca}{{\cal A}}
+\newcommand{\cb}{{\cal B}}
+\newcommand{\cc}{{\cal C}}
+\newcommand{\cd}{{\cal D}}
+\newcommand{\ce}{{\cal E}}
+\newcommand{\cf}{{\cal F}}
+\newcommand{\ch}{{\cal H}}
+\newcommand{\cl}{{\cal L}}
+\newcommand{\cm}{{\cal M}}
+\newcommand{\cp}{{\cal P}}
+\newcommand{\cs}{{\cal S}}
+\newcommand{\cz}{{\cal Z}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\la}{\leftarrow}
+\newcommand{\Ra}{\Rightarrow}
+\newcommand{\dist}{\mbox{\rm dist}}
+\newcommand{\bn}{{\mathbb N}}
+\newcommand{\bz}{{\mathbb Z}}
+
+\newcommand{\expe}{{\mathsf E}}
+\newcommand{\pr}{{\mathsf{Pr}}}
+
+
+\setlength{\parindent}{0pt}
+%\setlength{\parskip}{2ex}
+\newenvironment{proofof}[1]{\bigskip\noindent{\itshape #1. }}{\hfill$\Box$\medskip}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+\newtheorem*{problem*}{Problem}
+
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{CS477 Combinatorics: Homework 2}
+\author{于峥 518030910437}
+\date{\today}
+
+\maketitle
+
+\begin{problem}
+$n$个硬币扔在地上，每个随机地正面向上或者反面向上，在所有可能的情况中，正反硬币差的绝对值的平均数是多少？
+\begin{sol}
+  枚举正面硬币的个数然后直接进行计算，
+  $$
+  \begin{aligned}
+    \frac 1 {2^n}\sum_{i=0}^n|n-2i|\binom{n}{i}
+    &=\frac 1 {2^{n-1}}\sum_{i=0}^{\lfloor\frac n 2\rfloor}(n-2i)\binom{n}{i} \\
+    &=\frac n {2^{n-1}}(1+\sum_{i=1}^{\lfloor\frac n 2\rfloor}\binom{n}{i} - 2\binom{n-1}{i-1})\\
+    &=\frac n {2^{n-1}}(1+\sum_{i=1}^{\lfloor\frac n 2\rfloor}\binom{n-1}{i} - \binom{n-1}{i-1})\\
+    &=\frac n {2^{n-1}}\binom{n-1}{\lfloor\frac n 2\rfloor}
+  \end{aligned}  
+  $$
+  特别的，$n=0$时平均数为$0$, 否则为$\frac n {2^{n-1}}\binom{n-1}{\lfloor\frac n 2\rfloor}$。
+\end{sol}
+\end{problem}
+
+\begin{problem} 证明：对任意自然数$n$和$m$，
+\[
+\sum_{k=0}^n \binom{n}{k}\binom{k}{m} = \binom{n}{m} 2^{n-m}.
+\]
+\begin{sol}
+  \textbf{组合证明}:左边式子可以认为是从$n$个人中选若干个人开会，并且要从这几个人中
+  选出$m$个代表。而右边的式子则是先选出$m$个代表，然后在剩下的$n-m$个人中选择要开会的
+  非代表人员。
+
+  \textbf{生成函数}:
+  用左式构造关于$m$的生成函数
+  \begin{align*}
+    &\sum_{m=0}^\infty\sum_{k=m}^n\binom{n}{k}\binom{k}{m}x^m  \\
+    =& \sum_{k=0}^\infty\sum_{m=0}^k\binom{n}{k}\binom{k}{m}x^m  \\
+    =& \sum_{k=0}^\infty \binom{n}{k}\sum_{m=0}^k\binom{k}{m}x^m  \\
+    =& \sum_{k=0}^\infty \binom{n}{k}(1+x)^k \\
+    =& (2 + x)^n
+  \end{align*}
+
+  其中$x^m$的系数正是$ \binom{n}{m} 2^{n-m}$。
+\end{sol}
+\end{problem}
+
+\begin{problem}
+证明：对任意正整数$n$, $a$, $b$，
+\[
+\sum_k \binom{k}{a} \binom{n-k}{b} = \binom{n+1}{a+b+1}.
+\]
+\begin{sol}
+  \textbf{组合证明}:左边的式子可以看作从一路$n+1$个人的队伍中先选出第$k+1$个人，
+  然后从前面$k$个人中选$a$个人，从后面$n-k$个人中选$b$个人。而右边就是直接从这
+  $n+1$个人中选$a+b+1$个人。
+
+  右侧的每一个选择，可以找到被选出某个人所在队伍位置$k$前有$a$个人被选出，由于这样的位置
+  唯一, 所以这对应了左边的唯一种选择，且不会有右侧的两种选择对应到左侧的同一选择。
+  
+\end{sol}
+\end{problem}
+
+\begin{problem}
+证明：对任意正整数$n$,
+\[
+\sum_k \binom{n}{2k} \binom{2k}{k} 2^{n-2k} = \binom{2n}{n}.
+\]
+\begin{sol}
+  \textbf{组合证明}:
+  右侧式子可认为是两个长为$n$的二进制串上的1的个数共有n个的方案数。将第一个二进制串
+  第$i$位与另一个二进制串的第$i$位进行配对，假设这些配对中$(0,0)$有$x$对，$(1,1)$有$y$对,
+  $(0,1)$和$(1,0)$共$z$对。那么有
+  \begin{equation*}
+    \left\{
+      \begin{aligned}
+        x + y + z = n \\
+        z + 2x = n
+      \end{aligned}
+    \right.
+  \end{equation*}
+  可以得到$x=y$, 所以任意一种选择都有这样的性质，记$x$为$k$,
+  这意味着我们可以构造二进制串达到同样的效果:
+
+  1. 首先选出$2k$个位置, 表示这两个串中对应位置的数相同的个数，然后再选$k$个位置放1,
+  其他位置放0，这一步放了$2k$个1。
+
+  2. 第一个串剩下$n-2k$个位置随意填$0$和$1$,但是第二个串对应位置放相反的数，
+  这一步放了$n-2k$个1。
+
+  而这个过程就是左边式子的选择方式。
+\end{sol}
+\end{problem}
+
+\begin{problem}
+证明：对任何正整数$n$, $m$，
+\[
+\sum_r \binom{2n}{2r-1} \binom{r-1}{m-1} = \binom{2n-m}{m-1}2^{2n-2m+1}.
+\]
+\begin{sol}
+\begin{align*}
+  &\sum_r \binom{2n}{2r-1} \binom{r-1}{m-1} \\
+  =& \sum_r \sum_k\binom{2n-k-1}{r-1}\binom{k}{r-1}\binom{r-1}{m-1} \\
+  =& \sum_r \sum_k\binom{2n-k-1}{r-1}\binom{k-m+1}{r-m}\binom{k}{m-1} \\
+  =& \sum_k \binom{k}{m-1} \sum_r \binom{2n-k-1}{r-1}\binom{k-m+1}{r-m} \\
+  =& \sum_k \binom{k}{m-1} \binom{2n-m}{k} \\
+  =& \binom{2n-m}{m-1}2^{2n-2m+1}
+\end{align*}
+\end{sol}
+\end{problem}
+
+\begin{problem}
+Euler函数$\phi: \mathbb{Z}^+ \to \mathbb{Z}^+$定义是：$\phi(n)$是$[n]$中和$n$互质的数的个数。
+定义
+\[
+f(n) = \sum_{i=1}^n \phi(n).
+\]
+
+(a) 找到一个正的常数$k$，使得$f \in \Theta(n^k)$；
+
+(b)(*) 找到一个正常数$C$，使得$f \sim Cn^k$。
+
+\begin{sol}
+  (a) 
+  \begin{lemma}
+    $n=\sum_{d|n}\phi(d)$
+    \begin{pf}
+      考虑将$1\sim n$按进行分类, 定义等价类
+      $$
+      \hat m_d = \{ 0 < m \leq n : (m, n) = d\}
+      $$
+      显然$\hat m_d$两两不交，且如果$d|n$则$|\hat m_d|=\phi(\frac n d)$。
+      所以 
+      $$n = \sum_{d|n}|\hat m_d| =\sum_{d|n}\phi(\frac n d)=\sum_{d|n}\phi(d)$$
+    \end{pf}
+  \end{lemma}
+  \begin{lemma}
+    $[n=1]=\sum_{d|n}\mu(d)$
+    \begin{pf}
+      $n=1$时等式显然成立。考虑$n$的质因子集合$S$，奇数大小的集合与偶数大小的集合数量相同。
+      $$
+      \sum_{d|n}\mu(d)
+      =\sum_{T\in S }(-1)^{|T|}
+      =0
+      $$
+    \end{pf}
+  \end{lemma}
+
+  \newpage
+  \begin{lemma}
+    $\phi(n)=\sum_{d|n}\mu(d)\frac n d$
+    \begin{pf}
+      \begin{align*}
+        \sum_{d|n}\mu(d)\frac n d 
+        &= \sum_{d|n}\mu(d)\sum_{pd|n} \phi(p) \\
+        &= \sum_{p|n}\phi(p)\sum_{pd|n} \mu(d) &\\
+        &= \phi(p) 
+      \end{align*}
+    \end{pf}
+  \end{lemma}
+  \begin{align*}
+      f(n) &= \sum_{i=1}^n\phi(i) \\
+      &= \sum_{i=1}^n \sum_{d|n}\mu(d) \frac i d \\
+      &= \sum_{d=1}^n \mu(d) \sum_{k=1}^{\lfloor \frac n d \rfloor} k \\
+      &= \sum_{d=1}^n \mu(d)\Bigg(\frac 1 2(\frac n d)^2 + O(\frac n d)\Bigg) \\
+      &= \frac {n^2} 2 \sum_{d=1}^n \frac {\mu(d)} {d^2}  + O(n\sum_{i=1}^n\frac 1 d) \\
+      &= \frac {n^2} 2 \sum_{d=1}^\infty \frac {\mu(d)} {d^2} + O(n^2\sum_{d>n}\frac 1 {d^2}) + O(n\sum_{i=1}^n\frac 1 d) 
+  \end{align*}
+
+  得到$k=2$, $f \in \Theta(n^2)$。
+\newpage
+  (b) 接上题
+  $$C = \frac 1 2 \sum_{d=1}^\infty \frac {\mu(d)} {d^2}$$
+  我们运用 \textbf{Lemma 2}, 
+  \begin{align*}
+    1 
+    &= \sum_{n=1}^\infty \frac 1 {n^2} \sum_{d|n} \mu(d) \\
+    &= \sum_{d=1}^\infty \sum_{m=1}^\infty\frac {\mu(d)} {(dm)^2} \\
+    &= \sum_{d=1}^\infty \frac {\mu(d)} {d^2} \sum_{m=1}^\infty \frac 1 {m^2}
+  \end{align*}
+  所以 $$C = \frac 1 2 \Big( \sum_{m=1}^\infty \frac 1 {m^2} \Big)^{-1}=\frac 3 {\pi^2}$$
+\end{sol} 
+\end{problem}
+
+\end{document}
+

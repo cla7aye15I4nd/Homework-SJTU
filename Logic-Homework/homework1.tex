@@ -1,0 +1,97 @@
+\documentclass{ximera}
+\usepackage[UTF8]{ctex}
+
+\title{Mathematical Logic}
+\author{于峥}
+
+\begin{document}
+\begin{abstract}
+    homework 1
+\end{abstract}
+\maketitle
+
+\begin{problem} Let M be a non-empty set. 
+    
+    Then the following are equivalent.
+
+    (a) M is at most countable.
+
+    (b) There is a surjective function f : N $\rightarrow$ M.
+
+    (c) There is an injective function f : M $\rightarrow$ N.
+    \begin{solution}
+        (1) $(a) \rightarrow (b)$
+        根据可数的定义
+
+        $$
+        M = \{ \alpha(n) | n \in \mathbb{N} \} = \{ \alpha(0), \alpha(1), \alpha(2), \dots \}.
+        $$
+
+        则其中的$\alpha$就是自然数到$M$的满射。
+
+        (2) $(b) \rightarrow (c) $
+
+        由于存在 $N \rightarrow M$ 的满射 $f$，$\forall x \in M$, $\exists y \in \mathbb{N}, f(y) = x$，于是构造函数$g$：
+
+        $\forall x \in M$, 任选一个$y \in N, f(y) = x$，让$g(x) = y$, 则$g$为M $\rightarrow$ N的单射。
+
+        (3) $(c) \rightarrow (a)$
+
+        由于存在$M \rightarrow N$的单射$f$，所以我们按照以下步骤构造函数$g$:
+
+        从$f$的像集中选择最小的值$y_0$, $y_0$在$f$中的原像为$x_0$,让$g(0) = x_0$。
+
+
+        从$f$的像集中选择第二小的值$y_1$, $y_1$在$f$中的原像为$x_1$。令$g(1) = x_1$。
+
+        依次类推
+
+        那么 $M$ 可以表示为 $\{ g(n) | n \in \mathbb(N) \}$, 
+
+
+
+    \end{solution}    
+\end{problem} 
+
+\begin{problem} Let A be an alphabet which is at most countable. Then $A^*$ is countable
+    \begin{solution}
+        (1) 若 $A$ 大小是有限的，$|A| = n$, 那么$\forall x \in A^*$, 我们可以将$x$看成一个$n+1$进制的数，于是$A^*$可以与$\mathbb{N}$一一对应，所以$A^*$是可数的。
+
+        (2) 若 $A$ 是无限集，因为$A$是可数的，所以先给$A$中的元素规定好顺序。
+
+        我们可以给$A^*$中的任意两个元素规定顺序：即比较元素的字典序大小。
+
+        由于按照这个规则我们可以找到每个元素的最小的大于它本身的元素，所以可以将元素按顺序排成一列，所以$A^*$是可数的。
+
+
+
+    \end{solution}
+\end{problem}
+ 
+\begin{problem}
+    Prove that for every set M there is no surjective function from M to  
+    $\mathcal{P}(M)=\{B | B \subseteq M \}$
+    \begin{solution}
+        设$f$是$M$到$\mathcal{P}(M)$的函数，构造
+        $$B = \{ x \in M : x \not\in f(x)\}$$
+        若$\exists y \in M$, $f(y) = B$。
+        
+        考虑若 $y \in B$， 则$y \in f(y)$，然而这与$B$的定义矛盾。
+        
+        若 $y \not\in B$, 则$y \not\in B$, 所以$y \in B$产生矛盾。
+
+        所以不存在这样的函数$f$。
+    \end{solution}
+\end{problem}
+
+\begin{problem}  Using first-order logic to express that
+    $$\lim_{n \rightarrow \infty} f(n) = 4$$
+    In particular, please specify the symbol set S and the appropriate S-sentence
+    \begin{solution}
+        $$\forall \epsilon (\epsilon > 0 \Rightarrow \exists N (\forall n(n > N \Rightarrow |f(n) - 4| < \epsilon)))$$
+        $$S = \{f, >, 0, 4, -, || \}$$
+        $$S_{sentence}~~is \forall \epsilon (\epsilon > 0 \Rightarrow \exists N (\forall n(n > N \Rightarrow |f(n) - 4| < \epsilon)))$$
+
+    \end{solution}
+\end{problem}
+\end{document}

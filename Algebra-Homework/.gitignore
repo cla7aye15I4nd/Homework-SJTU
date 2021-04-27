@@ -1,0 +1,11 @@
+
+*.aux
+*.fdb_latexmk
+*.fls
+*.ids
+*.jax
+*.log
+homework1.oc
+*.out
+*.gz
+*.oc
